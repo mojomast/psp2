@@ -8,8 +8,13 @@ application_surface_draw_enable(true);
 // Center the window
 window_center();
 
-// Make sure the object is visible
+// Make sure the object is visible and has proper depth
 visible = true;
+depth = -1000; // Ensure it draws on top
+
+show_debug_message("Object visibility: " + string(visible));
+show_debug_message("Object depth: " + string(depth));
+show_debug_message("Room width: " + string(room_width) + ", height: " + string(room_height));
 
 // Initialize global variables
 init_game_state();
