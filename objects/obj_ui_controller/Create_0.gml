@@ -1,29 +1,52 @@
 // obj_ui_controller Create Event
 // Initialize UI system variables and panel settings
 
+show_debug_message("UI Controller Create Event - Initializing...");
+
 // UI Panel System Variables
 ui_active_panel = UI_PANEL_RESOURCES;  // Current active panel
 ui_previous_panel = UI_PANEL_RESOURCES; // Previous panel for back navigation
 ui_panels = ui_get_all_panels();  // Get panels from constants
 ui_panel_count = array_length(ui_panels);
 
-// Panel Layout Settings
-panel_width = UI_PANEL_WIDTH;
-panel_height = UI_PANEL_HEIGHT;
-panel_x = display_get_gui_width() - panel_width - 20;
-panel_y = 20;
+// Full-Screen Layout Settings
+screen_width = UI_SCREEN_WIDTH;
+screen_height = UI_SCREEN_HEIGHT;
 
-// Button System
+// Left Panel (Main Content)
+left_panel_x = UI_LEFT_PANEL_X;
+left_panel_y = UI_LEFT_PANEL_Y;
+left_panel_width = UI_PANEL_WIDTH;
+left_panel_height = UI_PANEL_HEIGHT;
+
+// Right Panel (Actions/Info)
+right_panel_x = UI_RIGHT_PANEL_X;
+right_panel_y = UI_RIGHT_PANEL_Y;
+right_panel_width = UI_PANEL_WIDTH;
+right_panel_height = UI_PANEL_HEIGHT;
+
+// Bottom Bar
+bottom_bar_x = 0;
+bottom_bar_y = UI_BOTTOM_BAR_Y;
+bottom_bar_width = UI_SCREEN_WIDTH;
+bottom_bar_height = UI_BOTTOM_BAR_HEIGHT;
+
+// Button System - Enhanced
 buttons = [];  // Array to hold button data
 button_hover = -1;  // Currently hovered button index
+tab_hover = -1;     // Currently hovered tab index
 
 // UI State Variables
 ui_visible = true;
 ui_initialized = false;
 
+show_debug_message("UI Controller - ui_visible set to: " + string(ui_visible));
+
 // Initialize the UI system
 ui_initialize();
 ui_initialized = true;
+
+show_debug_message("UI Controller - Initialization complete");
 
 // Colors and Styling - Reference UI constants
 color_background = UI_COLOR_PANEL_BG;
@@ -33,6 +56,9 @@ color_highlight = UI_COLOR_HIGHLIGHT;
 color_button_normal = UI_COLOR_BUTTON_NORMAL;
 color_button_hover = UI_COLOR_BUTTON_HOVER;
 color_button_pressed = UI_COLOR_BUTTON_PRESSED;
+color_button_active = UI_COLOR_BUTTON_ACTIVE;
+color_panel_header = UI_COLOR_PANEL_HEADER;
+color_accent = UI_COLOR_ACCENT;
 
 // Force font assets to be included (check if they exist first)
 if (font_exists(fnt_ui_main) && font_exists(fnt_title)) {
@@ -48,6 +74,7 @@ if (font_exists(fnt_ui_main)) {
 }
 
 // Initialize UI system
+show_debug_message("Enhanced UI system initialized with full-screen layout");
 show_debug_message("UI controller initialized");
 
 // Mark as initialized

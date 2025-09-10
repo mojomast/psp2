@@ -4,10 +4,32 @@
 // Don't process input in title room
 if (room == Room_Title) return;
 
-// Handle escape key to return to title screen
-if (keyboard_check_pressed(vk_escape)) {
-    transition_to_title();
-    return;
+// Handle keyboard shortcuts for panel switching
+if (keyboard_check_pressed(ord("1"))) ui_active_panel = UI_PANEL_RESOURCES;
+if (keyboard_check_pressed(ord("2"))) ui_active_panel = UI_PANEL_PETS;
+if (keyboard_check_pressed(ord("3"))) ui_active_panel = UI_PANEL_SHOP;
+if (keyboard_check_pressed(ord("4"))) ui_active_panel = UI_PANEL_CRAFTING;
+if (keyboard_check_pressed(ord("5"))) ui_active_panel = UI_PANEL_INVENTORY;
+
+// Handle keyboard shortcuts for quick actions
+if (keyboard_check_pressed(ord("S"))) {
+    show_debug_message("Quick save triggered");
+    add_feedback_message("Quick save!", "success");
+}
+if (keyboard_check_pressed(ord("L"))) {
+    show_debug_message("Quick load triggered");
+    add_feedback_message("Quick load!", "success");
+}
+
+// Toggle UI visibility with Tab key
+if (keyboard_check_pressed(vk_tab)) {
+    ui_visible = !ui_visible;
+    show_debug_message("UI visibility toggled to: " + string(ui_visible));
+    if (ui_visible) {
+        add_feedback_message("New UI activated!", "info");
+    } else {
+        add_feedback_message("Legacy UI activated!", "info");
+    }
 }
 
 if (!ui_visible) return;
@@ -16,29 +38,31 @@ if (!ui_visible) return;
 var _mouse_x = device_mouse_x_to_gui(0);
 var _mouse_y = device_mouse_y_to_gui(0);
 var _mouse_pressed = mouse_check_button_pressed(mb_left);
+var _mouse_released = mouse_check_button_released(mb_left);
 
-// Reset button hover
+// Reset hover states
 button_hover = -1;
+tab_hover = -1;
 
-// Handle panel tab clicks
-var _tab_width = panel_width / ui_panel_count;
+// Handle tab clicks - Enhanced tab system
+var _tab_width = (screen_width - 2 * UI_MARGIN) / ui_panel_count;
+var _tab_y = UI_HEADER_HEIGHT - UI_TAB_HEIGHT;
+
 for (var i = 0; i < ui_panel_count; i++) {
-    var _tab_x = panel_x + (i * _tab_width);
-    var _tab_y = panel_y + 40;
+    var _tab_x = UI_MARGIN + (i * _tab_width);
     
-    if (_mouse_x >= _tab_x && _mouse_x <= _tab_x + _tab_width &&
-        _mouse_y >= _tab_y && _mouse_y <= _tab_y + 25) {
+    if (ui_is_point_in_rect(_mouse_x, _mouse_y, _tab_x, _tab_y, _tab_width, UI_TAB_HEIGHT)) {
+        tab_hover = i;
         
         if (_mouse_pressed) {
             ui_active_panel = ui_panels[i];
             show_debug_message("Switched to panel: " + ui_active_panel);
+            break;
         }
-        break;
     }
 }
 
-// Enhanced button interactions with hover feedback (T043)
-var _mouse_released = mouse_check_button_released(mb_left);
+// Enhanced button interactions with hover feedback
 var _any_button_hovered = false;
 
 for (var i = 0; i < array_length(buttons); i++) {
@@ -94,8 +118,41 @@ for (var i = 0; i < array_length(buttons); i++) {
     }
 }
 
-// Reset hover state if no button is hovered
-if (!_any_button_hovered) {
+// Handle bottom bar button interactions
+var _button_y = bottom_bar_y + 10;
+var _button_spacing = 20;
+var _button_width = 100;
+var _button_height = 40;
+
+// Save button
+var _save_button_x = UI_MARGIN;
+if (ui_is_point_in_rect(_mouse_x, _mouse_y, _save_button_x, _button_y, _button_width, _button_height)) {
+    if (_mouse_pressed) {
+        show_debug_message("Save button clicked");
+        // TODO: Implement save functionality
+        add_feedback_message("Game saved!", "success");
+    }
+}
+
+// Load button
+var _load_button_x = _save_button_x + _button_width + _button_spacing;
+if (ui_is_point_in_rect(_mouse_x, _mouse_y, _load_button_x, _button_y, _button_width, _button_height)) {
+    if (_mouse_pressed) {
+        show_debug_message("Load button clicked");
+        // TODO: Implement load functionality
+        add_feedback_message("Game loaded!", "success");
+    }
+}
+
+// Reset button
+var _reset_button_x = _load_button_x + _button_width + _button_spacing;
+if (ui_is_point_in_rect(_mouse_x, _mouse_y, _reset_button_x, _button_y, _button_width, _button_height)) {
+    if (_mouse_pressed) {
+        show_debug_message("Reset button clicked");
+        // TODO: Implement reset functionality
+        add_feedback_message("Game reset!", "warning");
+    }
+}
     button_hover = -1;
 }
 
@@ -136,6 +193,41 @@ if (ui_active_panel == "pets" && script_exists(scr_pet_panel)) {
     }
 }
 
+// Handle bottom bar button clicks
+var _bottom_button_y = bottom_bar_y + 10;
+var _bottom_button_width = 100;
+var _bottom_button_height = 40;
+var _bottom_button_spacing = 20;
+var _bottom_buttons = ["Save Game", "Load Game", "Settings", "Quit"];
+
+for (var i = 0; i < array_length(_bottom_buttons); i++) {
+    var _button_x = UI_MARGIN + i * (_bottom_button_width + _bottom_button_spacing);
+    
+    if (ui_is_point_in_rect(_mouse_x, _mouse_y, _button_x, _bottom_button_y, _bottom_button_width, _bottom_button_height)) {
+        if (_mouse_pressed) {
+            switch (_bottom_buttons[i]) {
+                case "Save Game":
+                    show_debug_message("Save Game clicked");
+                    // Add save functionality here
+                    break;
+                case "Load Game":
+                    show_debug_message("Load Game clicked");
+                    // Add load functionality here
+                    break;
+                case "Settings":
+                    show_debug_message("Settings clicked");
+                    // Add settings functionality here
+                    break;
+                case "Quit":
+                    show_debug_message("Quit clicked");
+                    game_end();
+                    break;
+            }
+            break;
+        }
+    }
+}
+
 // Enhanced keyboard shortcuts for panel switching (T042)
 if (keyboard_check_pressed(ord("1"))) ui_switch_panel("resources");
 if (keyboard_check_pressed(ord("2"))) ui_switch_panel("pets");
@@ -154,8 +246,12 @@ if (keyboard_check_pressed(vk_tab)) {
 }
 
 // Update panel layout if display size changed
-if (display_get_gui_width() != panel_x + panel_width + 20) {
-    panel_x = display_get_gui_width() - panel_width - 20;
+if (display_get_gui_width() != screen_width) {
+    // Update layout for new screen size
+    screen_width = display_get_gui_width();
+    screen_height = display_get_gui_height();
+    left_panel_x = UI_LEFT_PANEL_X;
+    right_panel_x = UI_RIGHT_PANEL_X;
 }
 
 // Update hover visual effects (T043)

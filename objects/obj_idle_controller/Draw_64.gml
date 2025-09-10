@@ -17,7 +17,8 @@ if (_ui_visible) {
     // Draw minimal debug info when UI is active
     draw_set_color(c_white);
     draw_set_alpha(0.5);
-    draw_text(10, display_get_gui_height() - 20, "Press Tab to toggle UI | ESC for debug");
+    draw_text(10, display_get_gui_height() - 40, "NEW UI ACTIVE - Press Tab to toggle to legacy UI");
+    draw_text(10, display_get_gui_height() - 20, "ESC for debug | Mouse controls enabled");
     draw_set_alpha(1);
     return;
 }

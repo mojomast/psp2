@@ -1,25 +1,17 @@
 // scr_ui_helpers.gml
 // UI system helper functions
 
-/// @function ui_initialize()
-/// @description Initialize the UI system
-function ui_initialize() {
-    show_debug_message("Initializing UI system...");
-    
-    // Initialize feedback system
-    if (!variable_global_exists("feedback_messages")) {
-        global.feedback_messages = [];
-    }
-    if (!variable_global_exists("max_feedback_messages")) {
-        global.max_feedback_messages = FEEDBACK_MAX_MESSAGES;
-    }
-    
-    // Initialize selected pet tracking
-    if (!variable_global_exists("selected_pet_id")) {
-        global.selected_pet_id = -1;
-    }
-    
-    show_debug_message("UI system initialized");
+/// @function ui_get_all_panels()
+/// @description Get array of all available UI panels
+/// @return {array} Array of panel names
+function ui_get_all_panels() {
+    return [
+        UI_PANEL_RESOURCES,
+        UI_PANEL_PETS,
+        UI_PANEL_SHOP,
+        UI_PANEL_CRAFTING,
+        UI_PANEL_INVENTORY
+    ];
 }
 
 /// @function ui_is_point_in_rect(px, py, x, y, width, height)
@@ -35,15 +27,31 @@ function ui_is_point_in_rect(px, py, x, y, width, height) {
     return (px >= x && px <= x + width && py >= y && py <= y + height);
 }
 
-/// @function ui_set_active_panel(panel_name)
-/// @description Set the active UI panel (legacy compatibility)
-/// @param {string} panel_name Name of panel to activate
-function ui_set_active_panel(panel_name) {
-    if (instance_exists(obj_ui_controller)) {
-        with (obj_ui_controller) {
-            ui_switch_panel(panel_name);
+/// @function ui_switch_panel(panel_name)
+/// @description Switch to a different UI panel with validation
+/// @param {string} panel_name Name of panel to switch to
+function ui_switch_panel(panel_name) {
+    var _valid_panels = ui_get_all_panels();
+    
+    // Check if panel is valid
+    for (var i = 0; i < array_length(_valid_panels); i++) {
+        if (_valid_panels[i] == panel_name) {
+            if (instance_exists(obj_ui_controller)) {
+                with (obj_ui_controller) {
+                    ui_previous_panel = ui_active_panel;
+                    ui_active_panel = panel_name;
+                    show_debug_message("Switched to panel: " + panel_name);
+                    
+                    // Add feedback message
+                    add_feedback_message("Switched to " + string_upper(panel_name) + " panel", "info");
+                }
+            }
+            return true;
         }
     }
+    
+    show_debug_message("Invalid panel name: " + panel_name);
+    return false;
 }
 
 /// @function get_selected_pet_data()
@@ -198,4 +206,242 @@ function format_feedback_timestamp(timestamp) {
     } else {
         return string(floor(seconds_ago / 3600)) + "h";
     }
+}
+
+/// @function ui_draw_button(x, y, width, height, text, is_hovered, is_pressed, is_active)
+/// @description Draw a modern button with hover and press effects
+/// @param {real} x Button x position
+/// @param {real} y Button y position
+/// @param {real} width Button width
+/// @param {real} height Button height
+/// @param {string} text Button text
+/// @param {bool} is_hovered Whether button is hovered
+/// @param {bool} is_pressed Whether button is pressed
+/// @param {bool} is_active Whether button is active/selected
+function ui_draw_button(x, y, width, height, text, is_hovered, is_pressed, is_active) {
+    // Determine button color based on state
+    var button_color;
+    if (is_pressed) {
+        button_color = UI_COLOR_BUTTON_PRESSED;
+    } else if (is_active) {
+        button_color = UI_COLOR_BUTTON_ACTIVE;
+    } else if (is_hovered) {
+        button_color = UI_COLOR_BUTTON_HOVER;
+    } else {
+        button_color = UI_COLOR_BUTTON_NORMAL;
+    }
+    
+    // Draw button background with rounded corners effect (using rectangles)
+    draw_set_color(button_color);
+    draw_rectangle(x, y, x + width, y + height, false);
+    
+    // Add highlight effect for hovered buttons
+    if (is_hovered) {
+        draw_set_color(UI_COLOR_HIGHLIGHT);
+        draw_set_alpha(0.3);
+        draw_rectangle(x, y, x + width, y + 2, false);
+        draw_set_alpha(1.0);
+    }
+    
+    // Draw button border
+    draw_set_color(UI_COLOR_BORDER);
+    draw_rectangle(x, y, x + width, y + height, true);
+    
+    // Draw button text with shadow for better readability
+    draw_set_color(c_black);
+    draw_set_alpha(0.5);
+    draw_set_halign(fa_center);
+    draw_set_valign(fa_middle);
+    draw_text(x + width/2 + 1, y + height/2 + 1, text);
+    draw_set_alpha(1.0);
+    
+    draw_set_color(UI_COLOR_TEXT);
+    draw_text(x + width/2, y + height/2, text);
+    
+    // Reset alignment
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
+}
+
+/// @function ui_draw_panel(x, y, width, height, title, content_color)
+/// @description Draw a modern panel with header
+/// @param {real} x Panel x position
+/// @param {real} y Panel y position
+/// @param {real} width Panel width
+/// @param {real} height Panel height
+/// @param {string} title Panel title
+/// @param {real} content_color Background color for content area
+function ui_draw_panel(x, y, width, height, title, content_color) {
+    // Draw panel background
+    draw_set_color(UI_COLOR_PANEL_BG);
+    draw_rectangle(x, y, x + width, y + height, false);
+    
+    // Draw header background
+    draw_set_color(UI_COLOR_PANEL_HEADER);
+    draw_rectangle(x, y, x + width, y + UI_TAB_HEIGHT, false);
+    
+    // Draw panel border
+    draw_set_color(UI_COLOR_BORDER);
+    draw_rectangle(x, y, x + width, y + height, true);
+    
+    // Draw title
+    draw_set_color(UI_COLOR_TEXT);
+    draw_set_halign(fa_center);
+    draw_set_valign(fa_middle);
+    draw_text(x + width/2, y + UI_TAB_HEIGHT/2, title);
+    
+    // Draw content area background
+    draw_set_color(content_color);
+    draw_rectangle(x + 1, y + UI_TAB_HEIGHT + 1, x + width - 1, y + height - 1, false);
+    
+    // Reset alignment
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
+}
+
+/// @function ui_draw_tab(x, y, width, height, text, is_active, is_hovered)
+/// @description Draw a tab button
+/// @param {real} x Tab x position
+/// @param {real} y Tab y position
+/// @param {real} width Tab width
+/// @param {real} height Tab height
+/// @param {string} text Tab text
+/// @param {bool} is_active Whether tab is active
+/// @param {bool} is_hovered Whether tab is hovered
+function ui_draw_tab(x, y, width, height, text, is_active, is_hovered) {
+    // Determine tab color
+    var tab_color;
+    if (is_active) {
+        tab_color = UI_COLOR_HIGHLIGHT;
+    } else if (is_hovered) {
+        tab_color = UI_COLOR_BUTTON_HOVER;
+    } else {
+        tab_color = UI_COLOR_BUTTON_NORMAL;
+    }
+    
+    // Draw tab background
+    draw_set_color(tab_color);
+    draw_rectangle(x, y, x + width, y + height, false);
+    
+    // Draw tab border
+    draw_set_color(UI_COLOR_BORDER);
+    draw_rectangle(x, y, x + width, y + height, true);
+    
+    // Draw tab text
+    draw_set_color(UI_COLOR_TEXT);
+    draw_set_halign(fa_center);
+    draw_set_valign(fa_middle);
+    draw_text(x + width/2, y + height/2, text);
+    
+    // Reset alignment
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
+}
+
+/// @function ui_create_button(x, y, width, height, text, callback)
+/// @description Create a button data structure
+/// @param {real} x Button x position
+/// @param {real} y Button y position
+/// @param {real} width Button width
+/// @param {real} height Button height
+/// @param {string} text Button text
+/// @param {function} callback Function to call when clicked
+/// @return {struct} Button data structure
+function ui_create_button(x, y, width, height, text, callback) {
+    return {
+        x: x,
+        y: y,
+        width: width,
+        height: height,
+        text: text,
+        callback: callback,
+        hovered: false,
+        pressed: false,
+        active: false
+    };
+}
+
+/// @function ui_update_button_hover(button, mouse_x, mouse_y)
+/// @description Update button hover state
+/// @param {struct} button Button data structure
+/// @param {real} mouse_x Mouse x position
+/// @param {real} mouse_y Mouse y position
+/// @return {bool} True if button state changed
+function ui_update_button_hover(button, mouse_x, mouse_y) {
+    var was_hovered = button.hovered;
+    button.hovered = ui_is_point_in_rect(mouse_x, mouse_y, button.x, button.y, button.width, button.height);
+    return (was_hovered != button.hovered);
+}
+
+/// @function ui_switch_panel(panel_name)
+/// @description Switch to a specific UI panel
+/// @param {string} panel_name Name of panel to switch to
+function ui_switch_panel(panel_name) {
+    if (instance_exists(obj_ui_controller)) {
+        with (obj_ui_controller) {
+            var _panels = ui_get_all_panels();
+            for (var i = 0; i < array_length(_panels); i++) {
+                if (_panels[i] == panel_name) {
+                    ui_active_panel = panel_name;
+                    show_debug_message("Switched to panel: " + panel_name);
+                    break;
+                }
+            }
+        }
+    }
+}
+
+/// @function ui_switch_to_next_panel()
+/// @description Switch to the next panel in the list
+function ui_switch_to_next_panel() {
+    if (instance_exists(obj_ui_controller)) {
+        with (obj_ui_controller) {
+            var _panels = ui_get_all_panels();
+            var _current_index = -1;
+            
+            for (var i = 0; i < array_length(_panels); i++) {
+                if (_panels[i] == ui_active_panel) {
+                    _current_index = i;
+                    break;
+                }
+            }
+            
+            if (_current_index != -1) {
+                var _next_index = (_current_index + 1) % array_length(_panels);
+                ui_active_panel = _panels[_next_index];
+                show_debug_message("Switched to next panel: " + ui_active_panel);
+            }
+        }
+    }
+}
+
+/// @function ui_switch_to_previous_panel()
+/// @description Switch to the previous panel in the list
+function ui_switch_to_previous_panel() {
+    if (instance_exists(obj_ui_controller)) {
+        with (obj_ui_controller) {
+            var _panels = ui_get_all_panels();
+            var _current_index = -1;
+            
+            for (var i = 0; i < array_length(_panels); i++) {
+                if (_panels[i] == ui_active_panel) {
+                    _current_index = i;
+                    break;
+                }
+            }
+            
+            if (_current_index != -1) {
+                var _prev_index = (_current_index - 1 + array_length(_panels)) % array_length(_panels);
+                ui_active_panel = _panels[_prev_index];
+                show_debug_message("Switched to previous panel: " + ui_active_panel);
+            }
+        }
+    }
+}
+
+/// @function ui_update_hover_effects()
+/// @description Update hover effects for UI elements
+function ui_update_hover_effects() {
+    // This function can be expanded to handle various hover effects
+    // Currently handled in the Step event
 }

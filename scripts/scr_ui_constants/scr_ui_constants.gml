@@ -5,12 +5,15 @@
 #macro UI_COLOR_BUTTON_NORMAL make_color_rgb(60, 60, 60)
 #macro UI_COLOR_BUTTON_HOVER make_color_rgb(80, 80, 80)
 #macro UI_COLOR_BUTTON_PRESSED make_color_rgb(100, 100, 100)
+#macro UI_COLOR_BUTTON_ACTIVE make_color_rgb(120, 120, 120)
 #macro UI_COLOR_BORDER make_color_rgb(100, 100, 100)
 #macro UI_COLOR_TEXT c_white
-#macro UI_COLOR_PANEL_BG make_color_rgb(30, 30, 30)
+#macro UI_COLOR_PANEL_BG make_color_rgb(25, 25, 25)
+#macro UI_COLOR_PANEL_HEADER make_color_rgb(35, 35, 35)
 #macro UI_COLOR_SELECTED make_color_rgb(100, 150, 100)
-#macro UI_COLOR_SLOT_BG make_color_rgb(50, 50, 50)
+#macro UI_COLOR_SLOT_BG make_color_rgb(45, 45, 45)
 #macro UI_COLOR_HIGHLIGHT c_yellow
+#macro UI_COLOR_ACCENT make_color_rgb(70, 130, 180)
 
 // UI Panel Constants
 #macro UI_PANEL_RESOURCES "resources"
@@ -19,19 +22,35 @@
 #macro UI_PANEL_CRAFTING "crafting"
 #macro UI_PANEL_INVENTORY "inventory"
 
-// UI Size Constants
-#macro UI_PANEL_WIDTH 300
-#macro UI_PANEL_HEIGHT 400
-#macro UI_BUTTON_HEIGHT 25
-#macro UI_BUTTON_SPACING 5
+// UI Size Constants - Full Screen Layout
+#macro UI_SCREEN_WIDTH 1366
+#macro UI_SCREEN_HEIGHT 768
+#macro UI_PANEL_WIDTH 350
+#macro UI_PANEL_HEIGHT 600
+#macro UI_BUTTON_HEIGHT 35
+#macro UI_BUTTON_WIDTH 120
+#macro UI_BUTTON_SPACING 8
+#macro UI_MARGIN 20
+#macro UI_HEADER_HEIGHT 60
+#macro UI_TAB_HEIGHT 40
+
+// Layout Positions
+#macro UI_LEFT_PANEL_X UI_MARGIN
+#macro UI_LEFT_PANEL_Y UI_HEADER_HEIGHT + UI_MARGIN
+#macro UI_RIGHT_PANEL_X (UI_SCREEN_WIDTH - UI_PANEL_WIDTH - UI_MARGIN)
+#macro UI_RIGHT_PANEL_Y UI_HEADER_HEIGHT + UI_MARGIN
+#macro UI_BOTTOM_BAR_Y (UI_SCREEN_HEIGHT - 80)
+#macro UI_BOTTOM_BAR_HEIGHT 60
 
 // Pet Panel Constants
-#macro PET_SLOT_SIZE 60
-#macro PET_SLOT_SPACING 10
+#macro PET_SLOT_SIZE 70
+#macro PET_SLOT_SPACING 12
+#macro PET_GRID_COLS 4
+#macro PET_GRID_ROWS 6
 
 // Feedback Panel Constants
-#macro FEEDBACK_MESSAGE_HEIGHT 16
-#macro FEEDBACK_MAX_MESSAGES 20
+#macro FEEDBACK_MESSAGE_HEIGHT 18
+#macro FEEDBACK_MAX_MESSAGES 25
 
 // Timer Constants
 #macro IDLE_UPDATE_INTERVAL 1.0  // Update idle income every 1 second
