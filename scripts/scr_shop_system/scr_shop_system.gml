@@ -4,7 +4,7 @@
 // Shop inventory is initialized in scr_init_game.gml
 
 // Buy item from shop
-function buy_from_shop(_item_index) {
+function shop_buy_from_shop(_item_index) {
     if (_item_index < 0 || _item_index >= array_length(global.shop_items)) return false;
     
     var _item = global.shop_items[_item_index];
@@ -35,7 +35,7 @@ function buy_from_shop(_item_index) {
 }
 
 // Sell item to shop
-function sell_to_shop(_item_index) {
+function shop_sell_to_shop(_item_index) {
     if (_item_index < 0 || _item_index >= array_length(global.inventory)) return false;
     
     var _item = global.inventory[_item_index];
@@ -61,7 +61,7 @@ function sell_to_shop(_item_index) {
 }
 
 // Display shop menu (text-based)
-function display_shop() {
+function shop_display_shop() {
     show_debug_message("=== PAWN SHOP ===");
     show_debug_message("Gold: " + string(global.resources.gold));
     show_debug_message("");
@@ -85,21 +85,29 @@ function display_shop() {
     }
     
     show_debug_message("");
-    show_debug_message("Commands: buy <number>, sell <number>, exit");
+    show_debug_message("Shop shortcuts: Press 1-3 to buy, Q-W to sell, ESC to exit");
 }
 
 // Process shop command
-function process_shop_command(_command) {
+function shop_process_shop_command(_command) {
     var _parts = string_split(_command, " ");
+    
+    if (array_length(_parts) < 1) return;
+    
+    var _action = _parts[0];
+    
+    if (_action == "exit") {
+        // Handled by caller
+        return;
+    }
     
     if (array_length(_parts) < 2) return;
     
-    var _action = _parts[0];
     var _index = real(_parts[1]);
     
     if (_action == "buy") {
-        buy_from_shop(_index);
+        shop_buy_from_shop(_index);
     } else if (_action == "sell") {
-        sell_to_shop(_index);
+        shop_sell_to_shop(_index);
     }
 }

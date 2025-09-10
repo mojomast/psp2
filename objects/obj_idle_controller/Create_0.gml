@@ -23,6 +23,7 @@ init_game_state();
 display_mode = "normal"; // normal, shop, help, status
 last_key_time = 0;
 last_status_update = 0; // Track last status update time
+selected_pet = undefined; // For pet selection
 
 show_debug_message("Game initialized successfully. Display mode: " + display_mode);
 
@@ -48,6 +49,8 @@ function show_user_guide() {
     show_debug_message("   R - Reset game to starting state");
     show_debug_message("   S - Open pawn shop (browse items)");
     show_debug_message("   I - Show detailed player status");
+    show_debug_message("   C - Open crafting system");
+    show_debug_message("   P - Manage pets");
     show_debug_message("   H - Show this help");
     show_debug_message("   G - Full user guide");
     show_debug_message("");
@@ -87,8 +90,10 @@ function show_user_guide() {
     show_debug_message("   • Buy items with gold");
     show_debug_message("   • Sell items from your inventory");
     show_debug_message("   • Items include weapons, resources, consumables");
-    show_debug_message("   • Shop browsing available now");
-    show_debug_message("   • Buy/sell commands coming soon!");
+    show_debug_message("   • Press S to enter shop");
+    show_debug_message("   • Press 1-3 to buy items 0-2");
+    show_debug_message("   • Press Q-W to sell items 0-1");
+    show_debug_message("   • Press ESC to exit shop");
     show_debug_message("");
 
     show_debug_message("🔨 CRAFTING SYSTEM");
@@ -96,9 +101,16 @@ function show_user_guide() {
     show_debug_message("   • Use wood, metal, and gems for recipes");
     show_debug_message("   • Crafted items can be sold for profit");
     show_debug_message("   • Higher quality items sell for more");
+    show_debug_message("   • Press C to enter crafting");
+    show_debug_message("   • Press 1-8 to craft items 0-7");
+    show_debug_message("   • Press ESC to exit crafting");
     show_debug_message("");
 
-    show_debug_message("⭐ PROGRESSION");
+    show_debug_message("🐾 PET MANAGEMENT");
+    show_debug_message("   • Press P to enter pet management");
+    show_debug_message("   • Press 1-9 to select pets 0-8");
+    show_debug_message("   • Press E to send selected pet exploring");
+    show_debug_message("   • Press ESC to exit pet management");
     show_debug_message("   • Gain experience through pet activities");
     show_debug_message("   • Level up to increase resource generation");
     show_debug_message("   • Unlock new pets and abilities");
@@ -147,8 +159,15 @@ show_debug_message("T - Run test suite");
 show_debug_message("R - Reset game state");
 show_debug_message("S - Open pawn shop");
 show_debug_message("I - Show player status");
+show_debug_message("C - Open crafting system");
+show_debug_message("P - Manage pets");
 show_debug_message("H - Show this help");
-show_debug_message("Shop commands: buy <number>, sell <number>");
+    show_debug_message("Shop shortcuts: Press 1-3 to buy items 0-2, Q-W to sell items 0-1, ESC to exit shop");
+    show_debug_message("Crafting shortcuts: Press 1-8 to craft items 0-7, ESC to exit crafting");
+    show_debug_message("Pet shortcuts: Press 1-9 to select pets 0-8, E to explore, ESC to exit pets");
 show_debug_message("=== ENJOY YOUR IDLE ADVENTURE! ===");
 show_debug_message("💰 Resources are accumulating automatically...");
 show_debug_message("🐕 Your pet 'Buddy' is ready for adventure!");
+
+// Show complete user guide on startup
+show_user_guide();

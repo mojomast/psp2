@@ -2,7 +2,7 @@
 // Procedural map generation system
 
 // Generate a new map
-function generate_map(_seed, _size, _difficulty) {
+function map_generate_map(_seed, _size, _difficulty) {
     // Set random seed for reproducible maps
     random_set_seed(_seed);
 
@@ -112,7 +112,7 @@ function generate_map(_seed, _size, _difficulty) {
 }
 
 // Validate map structure
-function validate_map(_map) {
+function map_validate_map(_map) {
     if (_map == undefined) return false;
     if (!is_struct(_map)) return false;
     if (_map.size <= 0) return false;
@@ -127,7 +127,7 @@ function validate_map(_map) {
 }
 
 // Get tile at coordinates
-function get_map_tile(_map, _x, _y) {
+function map_get_map_tile(_map, _x, _y) {
     if (_x < 0 || _x >= _map.size || _y < 0 || _y >= _map.size) {
         return "out_of_bounds";
     }
@@ -135,12 +135,12 @@ function get_map_tile(_map, _x, _y) {
 }
 
 // Check if coordinates are valid spawn point
-function is_valid_spawn(_map, _x, _y) {
+function map_is_valid_spawn(_map, _x, _y) {
     return (_x == _map.spawn_point.x && _y == _map.spawn_point.y);
 }
 
 // Check if coordinates are an exit
-function is_exit(_map, _x, _y) {
+function map_is_exit(_map, _x, _y) {
     for (var i = 0; i < array_length(_map.exits); i++) {
         if (_map.exits[i].x == _x && _map.exits[i].y == _y) {
             return true;
@@ -150,11 +150,11 @@ function is_exit(_map, _x, _y) {
 }
 
 // Get spawn point coordinates
-function get_spawn_point(_map) {
+function map_get_spawn_point(_map) {
     return {x: _map.spawn_point.x, y: _map.spawn_point.y};
 }
 
 // Get all exits
-function get_exits(_map) {
+function map_get_exits(_map) {
     return _map.exits;
 }

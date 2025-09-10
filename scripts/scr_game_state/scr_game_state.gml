@@ -2,7 +2,7 @@
 // Game state management functions
 
 // Save game to JSON
-function save_game() {
+function game_state_save_game() {
     var _save_data = {
         player_name: global.player_name,
         player_level: global.player_level,
@@ -22,7 +22,7 @@ function save_game() {
 }
 
 // Load game from JSON
-function load_game() {
+function game_state_load_game() {
     if (!file_exists("savegame.json")) {
         show_debug_message("No save file found");
         return;
@@ -46,13 +46,13 @@ function load_game() {
 }
 
 // Auto-save every 5 minutes
-function auto_save() {
-    save_game();
+function game_state_auto_save() {
+    game_state_save_game();
     global.last_save_time = current_time;
 }
 
 // Update game state (called every step) - OPTIMIZED VERSION
-function update_game_state() {
+function game_state_update_game_state() {
     // Update idle timer (only update, don't process every frame)
     global.idle_timer += delta_time / 1000000; // Convert microseconds to seconds
 
@@ -103,7 +103,24 @@ function update_game_state() {
     // PERFORMANCE OPTIMIZATION: Auto-save timer with reduced frequency check
     global.auto_save_timer += delta_time / 1000000; // Convert microseconds to seconds
     if (global.auto_save_timer >= global.auto_save_interval) {
-        auto_save();
+        game_state_auto_save();
         global.auto_save_timer = 0;
     }
+}
+
+// Wrapper functions for external access
+function save_game() {
+    game_state_save_game();
+}
+
+function load_game() {
+    game_state_load_game();
+}
+
+function auto_save() {
+    game_state_auto_save();
+}
+
+function update_game_state() {
+    game_state_update_game_state();
 }

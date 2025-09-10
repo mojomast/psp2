@@ -2,7 +2,7 @@
 // Crafting system for creating items from resources
 
 // Craft an item using a recipe
-function craft_item(_recipe) {
+function crafting_craft_item(_recipe) {
     // Validate recipe structure
     if (!is_struct(_recipe)) return false;
     if (!struct_exists(_recipe, "requirements")) return false;
@@ -49,7 +49,7 @@ function craft_item(_recipe) {
 }
 
 // Get crafting recipes
-function get_crafting_recipes() {
+function crafting_get_crafting_recipes() {
     return [
         {
             name: "Wooden Sword",
@@ -95,7 +95,7 @@ function get_crafting_recipes() {
 }
 
 // Check if item can be crafted
-function can_craft_item(_recipe) {
+function crafting_can_craft_item(_recipe) {
     if (!is_struct(_recipe)) return false;
     if (!struct_exists(_recipe, "requirements")) return false;
 
@@ -109,7 +109,7 @@ function can_craft_item(_recipe) {
 }
 
 // Get item count in inventory
-function get_inventory_count(_item_name) {
+function crafting_get_inventory_count(_item_name) {
     if (!variable_global_exists("inventory")) return 0;
 
     var _count = 0;
@@ -122,7 +122,7 @@ function get_inventory_count(_item_name) {
 }
 
 // Find item in inventory by name
-function find_item_in_inventory(_item_name) {
+function crafting_find_item_in_inventory(_item_name) {
     if (!variable_global_exists("inventory")) return undefined;
 
     for (var i = 0; i < array_length(global.inventory); i++) {
@@ -134,7 +134,7 @@ function find_item_in_inventory(_item_name) {
 }
 
 // Bulk craft items
-function bulk_craft(_recipe, _count) {
+function crafting_bulk_craft(_recipe, _count) {
     var _success_count = 0;
 
     for (var i = 0; i < _count; i++) {
@@ -150,4 +150,26 @@ function bulk_craft(_recipe, _count) {
     }
 
     return _success_count;
+}
+
+// Process crafting command
+function crafting_process_crafting_command(_command) {
+    var _parts = string_split(_command, " ");
+    
+    if (array_length(_parts) < 2) return;
+    
+    var _action = _parts[0];
+    var _index = real(_parts[1]);
+    
+    if (_action == "craft") {
+        var _recipes = get_crafting_recipes();
+        if (_index >= 0 && _index < array_length(_recipes)) {
+            var _recipe = _recipes[_index];
+            if (craft_item(_recipe)) {
+                show_debug_message("Crafted " + _recipe.result);
+            } else {
+                show_debug_message("Cannot craft " + _recipe.name + " - insufficient resources");
+            }
+        }
+    }
 }

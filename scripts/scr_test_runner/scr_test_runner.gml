@@ -1,7 +1,7 @@
 // scr_test_runner.gml
 // Test runner for all game systems
 
-function run_all_tests() {
+function test_run_all_tests() {
     show_debug_message("=== STARTING TEST SUITE ===");
     
     var _total_passed = 0;
@@ -74,7 +74,7 @@ function run_all_tests() {
 }
 
 // Quick test functions for manual testing
-function quick_test() {
+function test_quick_test() {
     show_debug_message("=== QUICK TEST ===");
     show_debug_message("Game initialized: " + string(variable_global_exists("player_name")));
     show_debug_message("Resources initialized: " + string(variable_global_exists("resources")));

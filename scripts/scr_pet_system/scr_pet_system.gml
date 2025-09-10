@@ -2,7 +2,7 @@
 // Core pet system functions
 
 // Create a new pet
-function create_pet(_name, _type) {
+function pet_create_pet(_name, _type) {
     var _pet = {
         name: _name,
         type: _type,
@@ -72,7 +72,7 @@ function create_pet(_name, _type) {
 }
 
 // Add pet to global pets array
-function add_pet(_pet) {
+function pet_add_pet(_pet) {
     if (!variable_global_exists("pets")) {
         global.pets = [];
     }
@@ -80,7 +80,7 @@ function add_pet(_pet) {
 }
 
 // Get pet by index
-function get_pet(_index) {
+function pet_get_pet(_index) {
     if (_index >= 0 && _index < array_length(global.pets)) {
         return global.pets[_index];
     }
@@ -88,7 +88,7 @@ function get_pet(_index) {
 }
 
 // Update all pets (called each step) - OPTIMIZED VERSION
-function update_pets() {
+function pet_update_pets() {
     if (!variable_global_exists("pets")) return;
 
     // PERFORMANCE OPTIMIZATION: Only process pet updates every 0.5 seconds instead of every frame
@@ -151,5 +151,41 @@ function update_pets() {
                 }
             }
         }
+    }
+}
+
+// Process pet command
+function pet_process_pet_command(_command) {
+    var _parts = string_split(_command, " ");
+    
+    if (array_length(_parts) < 2) return;
+    
+    var _action = _parts[0];
+    var _index = real(_parts[1]);
+    
+    if (_index < 0 || _index >= array_length(global.pets)) {
+        show_debug_message("Invalid pet index");
+        return;
+    }
+    
+    var _pet = global.pets[_index];
+    
+    if (_action == "explore") {
+        if (_pet.status == "idle") {
+            // Generate a random map
+            var _seed = irandom(999999);
+            var _size = 10 + irandom(10); // 10-20
+            var _difficulty = 1 + irandom(4); // 1-5
+            var _map = generate_map(_seed, _size, _difficulty);
+            _pet.explore(_map);
+            show_debug_message("Sent " + _pet.name + " to explore a map (difficulty " + string(_difficulty) + ")");
+        } else {
+            show_debug_message(_pet.name + " is already " + _pet.status);
+        }
+    } else if (_action == "status") {
+        show_debug_message("Pet: " + _pet.name + " (" + _pet.type + ")");
+        show_debug_message("Level: " + string(_pet.level) + ", Experience: " + string(_pet.experience));
+        show_debug_message("Status: " + _pet.status);
+        show_debug_message("Stats: HP=" + string(_pet.stats[0]) + ", ATK=" + string(_pet.stats[1]) + ", DEF=" + string(_pet.stats[2]) + ", SPD=" + string(_pet.stats[3]) + ", LCK=" + string(_pet.stats[4]));
     }
 }

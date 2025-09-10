@@ -39,8 +39,14 @@ switch (display_mode) {
             draw_text(20, 190, "Active pets: Loading...");
         }
         
-        draw_text(20, 220, "💡 Press H for help, S for shop, I for status");
-        break;
+    draw_text(20, 220, "💡 Press H for help, S for shop, I for status");
+    // Compact on-screen controls summary so players see key bindings immediately
+    draw_text(20, 250, "Controls: T-tests  R-reset  S-shop  I-status  C-craft  P-pets  H-help  G-guide");
+    draw_text(20, 270, "Shop shortcuts: 1-3 buy  |  Q-W sell  |  ESC exit (when in shop)");
+    draw_text(20, 290, "Crafting: 1-8 craft  |  ESC exit (when in crafting)");
+    draw_text(20, 310, "Pet management: 1-9 select  |  E explore  |  ESC exit (when in pets)");
+    draw_text(20, 330, "Note: Click the game window to ensure the keyboard is focused.");
+    break;
         
     case "help":
         // Draw help screen
@@ -49,10 +55,26 @@ switch (display_mode) {
         draw_text(20, 70, "R - Reset game state");
         draw_text(20, 90, "S - Open pawn shop");
         draw_text(20, 110, "I - Show player status");
-        draw_text(20, 130, "H - Show this help");
-        draw_text(20, 150, "G - Full user guide");
-        draw_text(20, 170, "Shop commands: buy <number>, sell <number>");
-        draw_text(20, 190, "Note: Make sure to click on the game window first!");
+        draw_text(20, 130, "C - Open crafting system");
+        draw_text(20, 150, "P - Manage pets");
+        draw_text(20, 170, "H - Show this help");
+        draw_text(20, 190, "G - Full user guide");
+        draw_text(20, 210, "");
+        draw_text(20, 230, "=== SHOP SHORTCUTS (when in shop) ===");
+        draw_text(20, 250, "1-3 - Buy items 0-2");
+        draw_text(20, 270, "Q-W - Sell items 0-1");
+        draw_text(20, 290, "ESC - Exit shop");
+        draw_text(20, 310, "");
+        draw_text(20, 330, "=== CRAFTING SHORTCUTS (when in crafting) ===");
+        draw_text(20, 350, "1-8 - Craft items 0-7");
+        draw_text(20, 370, "ESC - Exit crafting");
+        draw_text(20, 390, "");
+        draw_text(20, 410, "=== PET SHORTCUTS (when in pets) ===");
+        draw_text(20, 430, "1-9 - Select pet 0-8");
+        draw_text(20, 450, "E - Explore with selected pet");
+        draw_text(20, 470, "ESC - Exit pets");
+        draw_text(20, 490, "");
+        draw_text(20, 510, "Note: Make sure to click on the game window first!");
         break;
         
     case "status":
@@ -121,11 +143,51 @@ switch (display_mode) {
                     draw_text(40, _y + 40 + j * 20, string(j) + ". " + _inv_item.name + " (Sell for 25 gold)");
                 }
             }
-            draw_text(20, _y + 60 + array_length(global.inventory) * 20, "Commands: buy <number>, sell <number>");
-            draw_text(20, _y + 80 + array_length(global.inventory) * 20, "Note: Shop commands not yet implemented - use for browsing only");
+            draw_text(20, _y + 60 + array_length(global.inventory) * 20, "Press 1-3 to buy, Q-W to sell, ESC to exit");
         } else {
             draw_text(40, _y + 40, "Loading inventory...");
         }
+        break;
+        
+    case "crafting":
+        // Draw crafting interface
+        draw_text(20, 20, "=== CRAFTING SYSTEM ===");
+        
+        draw_text(20, 50, "Recipes:");
+        var _y = 70;
+        
+        var _recipes = get_crafting_recipes();
+        for (var i = 0; i < array_length(_recipes); i++) {
+            var _recipe = _recipes[i];
+            draw_text(40, _y, string(i) + ". " + _recipe.name);
+            draw_text(60, _y + 20, "Requirements: " + json_stringify(_recipe.requirements));
+            draw_text(60, _y + 40, "Result: " + _recipe.result);
+            _y += 70;
+        }
+        
+        draw_text(20, _y + 20, "Press 1-8 to craft, ESC to exit");
+        break;
+        
+    case "pets":
+        // Draw pet management interface
+        draw_text(20, 20, "=== PET MANAGEMENT ===");
+        
+        draw_text(20, 50, "Your pets:");
+        var _y = 70;
+        
+        if (variable_global_exists("pets")) {
+            for (var i = 0; i < array_length(global.pets); i++) {
+                var _pet = global.pets[i];
+                draw_text(40, _y, string(i) + ". " + _pet.name + " (" + _pet.type + ") - Level " + string(_pet.level));
+                draw_text(60, _y + 20, "Status: " + _pet.status);
+                _y += 50;
+            }
+        } else {
+            draw_text(40, _y, "No pets found");
+            _y += 30;
+        }
+        
+        draw_text(20, _y + 20, "Press 1-9 to select pet, E to explore, ESC to exit");
         break;
         
     case "guide":

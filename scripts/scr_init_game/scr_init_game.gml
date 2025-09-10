@@ -87,3 +87,64 @@ function init_game_state() {
     global.pet_bonus_cache_timer = 0;
     global.pet_update_timer = 0;
 }
+
+// Shop system functions
+function buy_from_shop(_item_index) {
+    return shop_buy_from_shop(_item_index);
+}
+
+function sell_to_shop(_item_index) {
+    return shop_sell_to_shop(_item_index);
+}
+
+function process_shop_command(_command) {
+    return shop_process_shop_command(_command);
+}
+
+// Crafting system functions
+function craft_item(_recipe) {
+    return crafting_craft_item(_recipe);
+}
+
+function get_crafting_recipes() {
+    return crafting_get_crafting_recipes();
+}
+
+function can_craft_item(_recipe) {
+    return crafting_can_craft_item(_recipe);
+}
+
+function process_crafting_command(_command) {
+    return crafting_process_crafting_command(_command);
+}
+
+// Pet system functions
+function create_pet(_name, _type) {
+    return pet_create_pet(_name, _type);
+}
+
+function add_pet(_pet) {
+    return pet_add_pet(_pet);
+}
+
+function get_pet(_index) {
+    return pet_get_pet(_index);
+}
+
+function process_pet_command(_command) {
+    return pet_process_pet_command(_command);
+}
+
+function update_pets() {
+    return pet_update_pets();
+}
+
+// Map generation function
+function generate_map(_seed, _size, _difficulty) {
+    return map_generate_map(_seed, _size, _difficulty);
+}
+
+// Test functions
+function run_all_tests() {
+    return test_run_all_tests();
+}
