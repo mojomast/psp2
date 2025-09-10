@@ -1,0 +1,36 @@
+TITLE LOGO IMAGE REQUIREMENTS
+=============================
+
+Dimensions: 1366x768 pixels (Full HD 16:9)
+
+Design Elements:
+- Main title "PAWN STARS IDLE GAME" in large, bold lettering
+- Pawn shop themed imagery (chess pieces, gold coins, antiques)
+- Professional color scheme (golds, browns, dark backgrounds)
+- Space reserved at bottom (height 600-768px) for menu overlay
+
+Layout Zones:
+- Top area (0-200px): Game title
+- Middle area (200-500px): Main artwork/imagery 
+- Lower-middle (500-600px): Subtitle or tagline
+- Bottom area (600-768px): RESERVED for menu overlay (kept minimal)
+
+Art Style:
+- High quality, professional appearance
+- Pawn shop/antique store aesthetic
+- Rich textures and metallic effects
+- Should feel premium and engaging
+
+Text Elements (if included in image):
+- "PAWN STARS IDLE GAME" (primary title)
+- Optional subtitle like "Build Your Empire" or "Master of Trade"
+
+Technical Notes:
+- Save as PNG for transparency support
+- Keep file size reasonable for game performance
+- Ensure readability at different screen sizes
+- Bottom area should be darker to ensure menu text visibility
+
+Creator Credits:
+- Will be overlaid as text, not baked into image
+- "Created by: KYLE DUREPOS & MATTHEW DUREPOS"

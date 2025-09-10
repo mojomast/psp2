@@ -1,0 +1,12 @@
+{
+  "$GMScript":"v1",
+  "%Name":"test_ui_controller",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"test_ui_controller",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript","resourceVersion":"1.0",
+}

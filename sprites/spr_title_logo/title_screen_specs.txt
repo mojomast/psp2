@@ -1,0 +1,43 @@
+// Title Screen Implementation Guide
+// For Tasks T014-T017: Title Screen System
+
+/*
+TITLE SCREEN SPECIFICATIONS
+===========================
+
+Screen Layout:
+- Full screen background image (1366x768)
+- Bottom 168px reserved for menu and credits
+- Top 600px for main logo/artwork area
+
+Creator Credits Display:
+- Position: Bottom-right corner
+- Text: "Created by: KYLE DUREPOS & MATTHEW DUREPOS"
+- Font: fnt_ui_main (white text)
+- Background: Semi-transparent dark overlay for readability
+
+Menu System:
+- Position: Bottom-left area
+- Options: "Start Game", "Settings", "Exit"  
+- Navigation: Keyboard arrows + Enter, Mouse clicks
+- Selected item highlighted in gold color
+
+Visual Design:
+- Professional pawn shop theme
+- Dark/gold color scheme
+- Smooth transitions and hover effects
+- 60fps performance target
+
+Technical Requirements:
+- Use spr_title_logo as full-screen background
+- Draw GUI elements at consistent screen positions
+- Handle different screen resolutions gracefully
+- Preserve existing keyboard shortcut functionality
+- Smooth room transitions to Room1 (main game)
+*/
+
+// Implementation will be in:
+// - obj_title_controller/Create_0.gml (initialization)
+// - obj_title_controller/Draw_64.gml (rendering) 
+// - obj_title_controller/Step_0.gml (input handling)
+// - rooms/Room_Title/Room_Title.yy (room setup)

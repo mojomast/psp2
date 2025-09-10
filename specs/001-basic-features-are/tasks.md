@@ -45,15 +45,15 @@
 - **Rooms**: `rooms/Room_name/`
 
 ## Phase 3.1: Setup and Assets
-- [ ] T001 [P] Create title screen sprite assets in `sprites/spr_title_logo/`
-- [ ] T002 [P] Create UI icon sprites for resources in `sprites/spr_ui_icons/`
-- [ ] T003 [P] Create UI button sprites in `sprites/spr_ui_buttons/`
-- [ ] T004 [P] Create UI font for main interface in `fonts/fnt_ui_main/`
-- [ ] T005 [P] Create title screen font in `fonts/fnt_title/`
+- [x] T001 [P] Create title screen sprite assets in `sprites/spr_title_logo/`
+- [x] T002 [P] Create UI icon sprites for resources in `sprites/spr_ui_icons/`
+- [x] T003 [P] Create UI button sprites in `sprites/spr_ui_buttons/`
+- [x] T004 [P] Create UI font for main interface in `fonts/fnt_ui_main/`
+- [x] T005 [P] Create title screen font in `fonts/fnt_title/`
 
 ## Phase 3.2: Tests First (TDD) ⚠️ MUST COMPLETE BEFORE 3.3
 **CRITICAL: These tests MUST be written and MUST FAIL before ANY implementation**
-- [ ] T006 [P] Title screen navigation test in `scripts/test_title_screen/test_title_screen.gml`
+- [x] T006 [P] Title screen navigation test in `scripts/test_title_screen/test_title_screen.gml`
 - [ ] T007 [P] UI controller initialization test in `scripts/test_ui_controller/test_ui_controller.gml`
 - [ ] T008 [P] Resource panel display test in `scripts/test_ui_panels/test_ui_panels.gml`
 - [ ] T009 [P] Pet panel interaction test in `scripts/test_pet_ui/test_pet_ui.gml`
@@ -65,10 +65,10 @@
 ## Phase 3.3: Core Implementation (ONLY after tests are failing)
 
 ### Title Screen System
-- [ ] T014 [P] Title screen controller object in `objects/obj_title_controller/obj_title_controller.yy`
-- [ ] T015 [P] Title screen room setup in `rooms/Room_Title/Room_Title.yy`
-- [ ] T016 Title screen drawing system in `objects/obj_title_controller/Draw_64.gml`
-- [ ] T017 Title screen input handling in `objects/obj_title_controller/Step_0.gml`
+- [x] T014 [P] Title screen controller object in `objects/obj_title_controller/obj_title_controller.yy`
+- [x] T015 [P] Title screen room setup in `rooms/Room_Title/Room_Title.yy`
+- [x] T016 Title screen drawing system in `objects/obj_title_controller/Draw_64.gml`
+- [x] T017 Title screen input handling in `objects/obj_title_controller/Step_0.gml`
 
 ### Core UI Infrastructure  
 - [ ] T018 [P] UI controller object in `objects/obj_ui_controller/obj_ui_controller.yy`
