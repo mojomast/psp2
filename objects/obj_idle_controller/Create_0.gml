@@ -1,12 +1,23 @@
 // Create Event - Initialize game
 show_debug_message("=== PAWN STARS IDLE GAME INITIALIZING ===");
 
+// Enable application surface for drawing
+application_surface_enable(true);
+application_surface_draw_enable(true);
+
+// Center the window
+window_center();
+
+// Make sure the object is visible
+visible = true;
+
 // Initialize global variables
 init_game_state();
 
 // Initialize display state
 display_mode = "normal"; // normal, shop, help, status
 last_key_time = 0;
+last_status_update = 0; // Track last status update time
 
 show_debug_message("Game initialized successfully. Display mode: " + display_mode);
 

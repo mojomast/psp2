@@ -89,7 +89,7 @@ if (keyboard_check_pressed(ord("I"))) {
 }
 
 // Periodic status update (every 30 seconds)
-if (floor(global.idle_timer) % 30 == 0 && global.idle_timer > 0) {
+if (floor(global.idle_timer) >= last_status_update + 30 && global.idle_timer > 0) {
     show_debug_message("=== STATUS UPDATE ===");
     show_debug_message("Time played: " + string(floor(global.idle_timer)) + " seconds");
     show_debug_message("Resources: Gold=" + string(global.resources.gold) + 
@@ -100,6 +100,7 @@ if (floor(global.idle_timer) % 30 == 0 && global.idle_timer > 0) {
         show_debug_message("Active pets: " + string(array_length(global.pets)));
     }
     show_debug_message("💡 Press H for help, S for shop, I for status");
+    last_status_update = floor(global.idle_timer);
 }
 
 // Update game systems
