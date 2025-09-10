@@ -1,15 +1,47 @@
 // obj_ui_controller Step Event
 // Handle mouse and keyboard input for UI system
 
+// Debug: Show that Step event is running
+debug_frame_counter++;
+show_debug_message("UI Controller Step Event - Frame: " + string(current_time) + ", Counter: " + string(debug_frame_counter));
+
+// Debug: Check if any key is pressed
+if (keyboard_check_pressed(vk_anykey)) {
+    var key_pressed = keyboard_lastkey;
+    show_debug_message("KEY PRESSED: " + string(key_pressed) + " (vk_tab = " + string(vk_tab) + ")");
+    
+    // Test if it's specifically the Tab key
+    if (key_pressed == vk_tab) {
+        show_debug_message("TAB KEY DETECTED! Toggling UI...");
+        ui_visible = !ui_visible;
+        show_debug_message("UI visibility toggled to: " + string(ui_visible));
+    }
+}
+
 // Don't process input in title room
 if (room == Room_Title) return;
 
 // Handle keyboard shortcuts for panel switching
-if (keyboard_check_pressed(ord("1"))) ui_active_panel = UI_PANEL_RESOURCES;
-if (keyboard_check_pressed(ord("2"))) ui_active_panel = UI_PANEL_PETS;
-if (keyboard_check_pressed(ord("3"))) ui_active_panel = UI_PANEL_SHOP;
-if (keyboard_check_pressed(ord("4"))) ui_active_panel = UI_PANEL_CRAFTING;
-if (keyboard_check_pressed(ord("5"))) ui_active_panel = UI_PANEL_INVENTORY;
+if (keyboard_check_pressed(ord("1"))) {
+    show_debug_message("Panel 1 pressed");
+    ui_active_panel = UI_PANEL_RESOURCES;
+}
+if (keyboard_check_pressed(ord("2"))) {
+    show_debug_message("Panel 2 pressed");
+    ui_active_panel = UI_PANEL_PETS;
+}
+if (keyboard_check_pressed(ord("3"))) {
+    show_debug_message("Panel 3 pressed");
+    ui_active_panel = UI_PANEL_SHOP;
+}
+if (keyboard_check_pressed(ord("4"))) {
+    show_debug_message("Panel 4 pressed");
+    ui_active_panel = UI_PANEL_CRAFTING;
+}
+if (keyboard_check_pressed(ord("5"))) {
+    show_debug_message("Panel 5 pressed");
+    ui_active_panel = UI_PANEL_INVENTORY;
+}
 
 // Handle keyboard shortcuts for quick actions
 if (keyboard_check_pressed(ord("S"))) {
@@ -23,6 +55,7 @@ if (keyboard_check_pressed(ord("L"))) {
 
 // Toggle UI visibility with Tab key
 if (keyboard_check_pressed(vk_tab)) {
+    show_debug_message("TAB KEY PRESSED - Toggling UI");
     ui_visible = !ui_visible;
     show_debug_message("UI visibility toggled to: " + string(ui_visible));
     if (ui_visible) {

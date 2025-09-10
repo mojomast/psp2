@@ -21,6 +21,9 @@ draw_set_color(c_white);
 draw_text(10, 10, "NEW UI SYSTEM ACTIVE");
 draw_text(10, 30, "Press Tab to toggle UI modes");
 draw_text(10, 50, "Mouse controls enabled");
+draw_text(10, 70, "UI Controller Frame: " + string(current_time));
+draw_text(10, 90, "UI Visible: " + string(ui_visible));
+draw_text(10, 110, "Step Counter: " + string(debug_frame_counter));
 
 // Set up drawing
 draw_set_halign(fa_left);

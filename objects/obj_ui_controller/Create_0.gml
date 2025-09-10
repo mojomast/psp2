@@ -40,6 +40,9 @@ tab_hover = -1;     // Currently hovered tab index
 ui_visible = true;
 ui_initialized = false;
 
+// Debug counter
+debug_frame_counter = 0;
+
 show_debug_message("UI Controller - ui_visible set to: " + string(ui_visible));
 
 // Initialize the UI system
