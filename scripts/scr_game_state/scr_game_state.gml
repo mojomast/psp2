@@ -1,17 +1,30 @@
 // scr_game_state.gml
 // Game state management functions
 
+// Local constants - these should be defined in scr_ui_constants but adding here as fallback
+// If you're still getting errors, the constants from scr_ui_constants may not be loading properly
+#macro IDLE_UPDATE_INTERVAL_LOCAL 1.0
+#macro AUTOSAVE_INTERVAL_LOCAL 60
+#macro PET_BONUS_CACHE_TIME_LOCAL 5
+#macro BASE_GOLD_INCOME_LOCAL 1.0
+#macro BASE_WOOD_INCOME_LOCAL 0.5
+#macro BASE_METAL_INCOME_LOCAL 0.2
+#macro BASE_GEMS_INCOME_LOCAL 0.1
+
 // Save game to JSON
 function game_state_save_game() {
     global.last_save_time = current_time; // Update last save time before saving
     
     var _save_data = {
+        version: "1.0.0", // Save file version for compatibility
         player_name: global.player_name,
         player_level: global.player_level,
         player_experience: global.player_experience,
         resources: global.resources,
         pets: global.pets,
         inventory: global.inventory,
+        pokemon_cards: variable_global_exists("pokemon_cards") ? global.pokemon_cards : [],
+        chat_agents: variable_global_exists("chat_agents") ? global.chat_agents : [],
         last_save_time: global.last_save_time
     };
     
@@ -23,28 +36,48 @@ function game_state_save_game() {
     show_debug_message("Game saved");
 }
 
-// Load game from JSON
+// Load game from JSON with validation
 function game_state_load_game() {
     if (!file_exists("savegame.json")) {
         show_debug_message("No save file found");
-        return;
+        return false;
     }
     
-    var _file = file_text_open_read("savegame.json");
-    var _json = file_text_read_string(_file);
-    file_text_close(_file);
-    
-    var _save_data = json_parse(_json);
-    
-    global.player_name = _save_data.player_name;
-    global.player_level = _save_data.player_level;
-    global.player_experience = _save_data.player_experience;
-    global.resources = _save_data.resources;
-    global.pets = _save_data.pets;
-    global.inventory = _save_data.inventory;
-    global.last_save_time = _save_data.last_save_time;
-    
-    show_debug_message("Game loaded");
+    try {
+        var _file = file_text_open_read("savegame.json");
+        var _json = file_text_read_string(_file);
+        file_text_close(_file);
+        
+        var _save_data = json_parse(_json);
+        
+        // Validate save data
+        if (!is_struct(_save_data)) {
+            show_debug_message("Invalid save file format");
+            return false;
+        }
+        
+        // Check version compatibility (could add migration logic here)
+        var save_version = variable_struct_exists(_save_data, "version") ? _save_data.version : "0.0.0";
+        show_debug_message("Loading save file version: " + save_version);
+        
+        // Load with validation
+        global.player_name = variable_struct_exists(_save_data, "player_name") ? _save_data.player_name : "Player";
+        global.player_level = variable_struct_exists(_save_data, "player_level") ? _save_data.player_level : 1;
+        global.player_experience = variable_struct_exists(_save_data, "player_experience") ? _save_data.player_experience : 0;
+        global.resources = variable_struct_exists(_save_data, "resources") ? _save_data.resources : {gold: 100, wood: 50, metal: 25, gems: 10};
+        global.pets = variable_struct_exists(_save_data, "pets") ? _save_data.pets : [];
+        global.inventory = variable_struct_exists(_save_data, "inventory") ? _save_data.inventory : [];
+        global.pokemon_cards = variable_struct_exists(_save_data, "pokemon_cards") ? _save_data.pokemon_cards : [];
+        global.chat_agents = variable_struct_exists(_save_data, "chat_agents") ? _save_data.chat_agents : [];
+        global.last_save_time = variable_struct_exists(_save_data, "last_save_time") ? _save_data.last_save_time : current_time;
+        
+        show_debug_message("Game loaded successfully");
+        return true;
+        
+    } catch(_error) {
+        show_debug_message("Error loading save file: " + string(_error));
+        return false;
+    }
 }
 
 // Auto-save every 5 minutes
@@ -55,12 +88,15 @@ function game_state_auto_save() {
 
 // Update game state (called every step) - OPTIMIZED VERSION
 function game_state_update_game_state() {
-    // Update idle timer (only update, don't process every frame)
-    global.idle_timer += delta_time / 1000000; // Convert microseconds to seconds
+    // Convert delta_time once and reuse
+    var dt_seconds = delta_time / 1000000; // Convert microseconds to seconds
+    
+    // Update idle timer
+    global.idle_timer += dt_seconds;
 
-    // PERFORMANCE OPTIMIZATION: Only process idle income every 1 second instead of every frame
-    global.idle_accumulator += delta_time / 1000000;
-    if (global.idle_accumulator >= 1.0) { // Process once per second
+    // PERFORMANCE OPTIMIZATION: Only process idle income at set intervals
+    global.idle_accumulator += dt_seconds;
+    if (global.idle_accumulator >= IDLE_UPDATE_INTERVAL_LOCAL) { // Use local constant
         var _seconds_passed = global.idle_accumulator;
         global.idle_accumulator = 0;
 
@@ -78,16 +114,16 @@ function game_state_update_game_state() {
                     }
                 }
             }
-            global.pet_bonus_cache_timer = 300; // Recache every 5 seconds
+            global.pet_bonus_cache_timer = PET_BONUS_CACHE_TIME_LOCAL; // Use local constant
         } else {
             global.pet_bonus_cache_timer -= _seconds_passed;
         }
 
-        // Base idle income
-        var _gold_income = 1 + (global.player_level * 0.5) + global.cached_pet_bonuses.gold;
-        var _wood_income = 0.5 + (global.player_level * 0.2) + global.cached_pet_bonuses.wood;
-        var _metal_income = 0.2 + (global.player_level * 0.1) + global.cached_pet_bonuses.metal;
-        var _gems_income = 0.1 + (global.player_level * 0.05) + global.cached_pet_bonuses.gems;
+        // Base idle income using local constants
+        var _gold_income = BASE_GOLD_INCOME_LOCAL + (global.player_level * 0.5) + global.cached_pet_bonuses.gold;
+        var _wood_income = BASE_WOOD_INCOME_LOCAL + (global.player_level * 0.2) + global.cached_pet_bonuses.wood;
+        var _metal_income = BASE_METAL_INCOME_LOCAL + (global.player_level * 0.1) + global.cached_pet_bonuses.metal;
+        var _gems_income = BASE_GEMS_INCOME_LOCAL + (global.player_level * 0.05) + global.cached_pet_bonuses.gems;
 
         // Apply idle income (scaled by time)
         global.resources.gold += _gold_income * (_seconds_passed * global.idle_speed);
@@ -102,27 +138,27 @@ function game_state_update_game_state() {
         global.idle_start_time = current_time;
     }
 
-    // PERFORMANCE OPTIMIZATION: Auto-save timer with reduced frequency check
-    global.auto_save_timer += delta_time / 1000000; // Convert microseconds to seconds
-    if (global.auto_save_timer >= global.auto_save_interval) {
+    // Auto-save timer
+    global.auto_save_timer += dt_seconds; // Reuse converted time
+    if (global.auto_save_timer >= AUTOSAVE_INTERVAL_LOCAL) { // Use local constant
         game_state_auto_save();
         global.auto_save_timer = 0;
     }
 }
 
-// Wrapper functions for external access
+// Wrapper functions for external access (prevent infinite loops)
 function save_game() {
-    game_state_save_game();
+    return game_state_save_game();
 }
 
 function load_game() {
-    game_state_load_game();
+    return game_state_load_game();
 }
 
 function auto_save() {
-    game_state_auto_save();
+    return game_state_auto_save();
 }
 
 function update_game_state() {
-    game_state_update_game_state();
+    return game_state_update_game_state();
 }

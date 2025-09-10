@@ -179,16 +179,7 @@ function craft_item(_recipe) {
     return crafting_craft_item(_recipe);
 }
 
-// Find item in inventory by name
+// Wrapper for backward compatibility - uses the main function
 function find_item_in_inventory(_item_name) {
-    if (!variable_global_exists("inventory")) {
-        global.inventory = [];
-    }
-    
-    for (var i = 0; i < array_length(global.inventory); i++) {
-        if (global.inventory[i].name == _item_name) {
-            return global.inventory[i];
-        }
-    }
-    return undefined;
+    return crafting_find_item_in_inventory(_item_name);
 }

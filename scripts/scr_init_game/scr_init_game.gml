@@ -52,7 +52,7 @@ global.shop_items = [
 global.idle_timer = 0;
 global.idle_start_time = current_time;
 global.auto_save_timer = 0;
-global.auto_save_interval = 60; // 60 seconds (1 minute)
+global.auto_save_interval = 60; // AUTOSAVE_INTERVAL; // Use constant from scr_ui_constants
 
 // Game settings
 global.idle_speed = 1; // seconds per real second

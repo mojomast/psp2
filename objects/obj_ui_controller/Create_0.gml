@@ -2,14 +2,14 @@
 // Initialize UI system variables and panel settings
 
 // UI Panel System Variables
-ui_active_panel = "resources";  // Current active panel (resources, pets, shop, crafting, inventory)
-ui_previous_panel = "resources"; // Previous panel for back navigation
-ui_panels = ["resources", "pets", "shop", "crafting", "inventory"];
+ui_active_panel = UI_PANEL_RESOURCES;  // Current active panel
+ui_previous_panel = UI_PANEL_RESOURCES; // Previous panel for back navigation
+ui_panels = ui_get_all_panels();  // Get panels from constants
 ui_panel_count = array_length(ui_panels);
 
 // Panel Layout Settings
-panel_width = 300;
-panel_height = 400;
+panel_width = UI_PANEL_WIDTH;
+panel_height = UI_PANEL_HEIGHT;
 panel_x = display_get_gui_width() - panel_width - 20;
 panel_y = 20;
 
@@ -25,21 +25,27 @@ ui_initialized = false;
 ui_initialize();
 ui_initialized = true;
 
-// Colors and Styling
-color_background = make_color_rgb(30, 30, 30);
-color_border = make_color_rgb(100, 100, 100);
-color_text = c_white;
-color_highlight = c_yellow;
-color_button_normal = make_color_rgb(60, 60, 60);
-color_button_hover = make_color_rgb(80, 80, 80);
-color_button_pressed = make_color_rgb(100, 100, 100);
+// Colors and Styling - Reference UI constants
+color_background = UI_COLOR_PANEL_BG;
+color_border = UI_COLOR_BORDER;
+color_text = UI_COLOR_TEXT;
+color_highlight = UI_COLOR_HIGHLIGHT;
+color_button_normal = UI_COLOR_BUTTON_NORMAL;
+color_button_hover = UI_COLOR_BUTTON_HOVER;
+color_button_pressed = UI_COLOR_BUTTON_PRESSED;
 
-// Force font assets to be included
-global._ui_fonts = [fnt_ui_main, fnt_title];
-global._ui_sprites = [spr_ui_buttons, spr_ui_icons];
+// Force font assets to be included (check if they exist first)
+if (font_exists(fnt_ui_main) && font_exists(fnt_title)) {
+    global._ui_fonts = [fnt_ui_main, fnt_title];
+}
+if (sprite_exists(spr_ui_buttons) && sprite_exists(spr_ui_icons)) {
+    global._ui_sprites = [spr_ui_buttons, spr_ui_icons];
+}
 
 // Font settings
-draw_set_font(fnt_ui_main);
+if (font_exists(fnt_ui_main)) {
+    draw_set_font(fnt_ui_main);
+}
 
 // Initialize UI system
 show_debug_message("UI controller initialized");

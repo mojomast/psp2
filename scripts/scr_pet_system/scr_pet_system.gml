@@ -1,6 +1,13 @@
 // scr_pet_system.gml
 // Core pet system functions
 
+// Local constants - these should be defined in scr_ui_constants but adding here as fallback
+#macro PET_UPDATE_INTERVAL_LOCAL 0.5
+#macro PET_EXPLORE_EXP_PER_SEC_LOCAL 2
+#macro PET_EXPLORE_RETURN_CHANCE_LOCAL 0.02
+#macro PET_BATTLE_COMPLETE_CHANCE_LOCAL 0.05
+#macro PET_LEVEL_EXP_REQUIRED_LOCAL 100
+
 // Create a new pet
 function pet_create_pet(_name, _type) {
     // Initialize global pet ID counter if it doesn't exist
@@ -97,13 +104,14 @@ function pet_get_pet(_index) {
 function pet_update_pets() {
     if (!variable_global_exists("pets")) return;
 
-    // PERFORMANCE OPTIMIZATION: Only process pet updates every 0.5 seconds instead of every frame
+    // PERFORMANCE OPTIMIZATION: Only process pet updates at intervals
     if (!variable_global_exists("pet_update_timer")) {
         global.pet_update_timer = 0;
     }
-    global.pet_update_timer += delta_time / 1000000;
+    var dt_seconds = delta_time / 1000000; // Convert once
+    global.pet_update_timer += dt_seconds;
 
-    if (global.pet_update_timer >= 0.5) { // Process every 0.5 seconds
+    if (global.pet_update_timer >= PET_UPDATE_INTERVAL_LOCAL) { // Use local constant
         var _time_passed = global.pet_update_timer;
         global.pet_update_timer = 0;
 
@@ -112,17 +120,17 @@ function pet_update_pets() {
 
             // Handle exploration
             if (_pet.status == "exploring") {
-                // PERFORMANCE OPTIMIZATION: Batch experience gain instead of per-frame
-                _pet.experience += _time_passed * 2; // 2 exp per second instead of 1 per frame
+                // Batch experience gain
+                _pet.experience += _time_passed * PET_EXPLORE_EXP_PER_SEC_LOCAL; // Use local constant
 
-                // Chance to level up (less frequent check)
-                if (_pet.experience >= _pet.level * 100) {
+                // Chance to level up
+                if (_pet.experience >= _pet.level * PET_LEVEL_EXP_REQUIRED_LOCAL) { // Use local constant
                     _pet.level_up();
                     _pet.experience = 0;
                 }
 
-                // PERFORMANCE OPTIMIZATION: Reduced exploration return chance
-                if (random(1) < 0.02) { // 2% chance per 0.5 seconds (4% per second total)
+                // Exploration return chance
+                if (random(1) < PET_EXPLORE_RETURN_CHANCE_LOCAL) { // Use local constant
                     _pet.status = "idle";
                     _pet.current_map = "";
 
@@ -144,13 +152,13 @@ function pet_update_pets() {
 
             // Handle battling
             if (_pet.status == "battling") {
-                // PERFORMANCE OPTIMIZATION: Reduced battle completion chance
-                if (random(1) < 0.05) { // 5% chance per 0.5 seconds (10% per second total)
+                // Battle completion chance
+                if (random(1) < PET_BATTLE_COMPLETE_CHANCE_LOCAL) { // Use local constant
                     _pet.status = "idle";
                     _pet.experience += 10;
 
                     // Chance to level up
-                    if (_pet.experience >= _pet.level * 100) {
+                    if (_pet.experience >= _pet.level * PET_LEVEL_EXP_REQUIRED_LOCAL) { // Use local constant
                         _pet.level_up();
                         _pet.experience = 0;
                     }
