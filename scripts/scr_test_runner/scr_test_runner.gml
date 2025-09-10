@@ -56,6 +56,102 @@ function test_run_all_tests() {
         _total_tests += 4;
     }
     
+    // Test Title Screen
+    try {
+        var _title_passed = run_title_screen_tests();
+        _total_passed += _title_passed ? 4 : 0; // 4 tests in title screen
+        _total_tests += 4;
+        array_push(_results, "Title Screen: " + (_title_passed ? "PASS" : "FAIL"));
+    } catch (_error) {
+        show_debug_message("Title Screen Tests Error: " + string(_error));
+        array_push(_results, "Title Screen: ERROR");
+        _total_tests += 4;
+    }
+    
+    // Test UI Controller
+    try {
+        var _ui_passed = run_ui_controller_tests();
+        _total_passed += _ui_passed ? 5 : 0; // 5 tests in UI controller
+        _total_tests += 5;
+        array_push(_results, "UI Controller: " + (_ui_passed ? "PASS" : "FAIL"));
+    } catch (_error) {
+        show_debug_message("UI Controller Tests Error: " + string(_error));
+        array_push(_results, "UI Controller: ERROR");
+        _total_tests += 5;
+    }
+    
+    // Test UI Panels
+    try {
+        var _panels_passed = run_ui_panels_tests();
+        _total_passed += _panels_passed ? 6 : 0; // 6 tests in UI panels
+        _total_tests += 6;
+        array_push(_results, "UI Panels: " + (_panels_passed ? "PASS" : "FAIL"));
+    } catch (_error) {
+        show_debug_message("UI Panels Tests Error: " + string(_error));
+        array_push(_results, "UI Panels: ERROR");
+        _total_tests += 6;
+    }
+    
+    // Test Pet UI
+    try {
+        var _pet_ui_passed = run_pet_ui_tests();
+        _total_passed += _pet_ui_passed ? 5 : 0; // 5 tests in pet UI
+        _total_tests += 5;
+        array_push(_results, "Pet UI: " + (_pet_ui_passed ? "PASS" : "FAIL"));
+    } catch (_error) {
+        show_debug_message("Pet UI Tests Error: " + string(_error));
+        array_push(_results, "Pet UI: ERROR");
+        _total_tests += 5;
+    }
+    
+    // Test Shop UI
+    try {
+        var _shop_ui_passed = run_shop_ui_tests();
+        _total_passed += _shop_ui_passed ? 5 : 0; // 5 tests in shop UI
+        _total_tests += 5;
+        array_push(_results, "Shop UI: " + (_shop_ui_passed ? "PASS" : "FAIL"));
+    } catch (_error) {
+        show_debug_message("Shop UI Tests Error: " + string(_error));
+        array_push(_results, "Shop UI: ERROR");
+        _total_tests += 5;
+    }
+    
+    // Test Crafting UI
+    try {
+        var _crafting_ui_passed = run_crafting_ui_tests();
+        _total_passed += _crafting_ui_passed ? 5 : 0; // 5 tests in crafting UI
+        _total_tests += 5;
+        array_push(_results, "Crafting UI: " + (_crafting_ui_passed ? "PASS" : "FAIL"));
+    } catch (_error) {
+        show_debug_message("Crafting UI Tests Error: " + string(_error));
+        array_push(_results, "Crafting UI: ERROR");
+        _total_tests += 5;
+    }
+    
+    // Test Keyboard UI
+    try {
+        var _keyboard_ui_passed = run_keyboard_ui_tests();
+        _total_passed += _keyboard_ui_passed ? 5 : 0; // 5 tests in keyboard UI
+        _total_tests += 5;
+        array_push(_results, "Keyboard UI: " + (_keyboard_ui_passed ? "PASS" : "FAIL"));
+    } catch (_error) {
+        show_debug_message("Keyboard UI Tests Error: " + string(_error));
+        array_push(_results, "Keyboard UI: ERROR");
+        _total_tests += 5;
+    }
+    
+    // Test Button System
+    try {
+        var _button_passed = run_button_system_tests();
+        _total_passed += _button_passed ? 5 : 0; // 5 tests in button system
+        _total_tests += 5;
+        array_push(_results, "Button System: " + (_button_passed ? "PASS" : "FAIL"));
+    } catch (_error) {
+        show_debug_message("Button System Tests Error: " + string(_error));
+        array_push(_results, "Button System: ERROR");
+        _total_tests += 5;
+    }
+    
     // Print results
     show_debug_message("=== TEST RESULTS ===");
     for (var i = 0; i < array_length(_results); i++) {

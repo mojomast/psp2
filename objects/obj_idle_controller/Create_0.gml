@@ -19,6 +19,14 @@ show_debug_message("Room width: " + string(room_width) + ", height: " + string(r
 // Initialize global variables
 init_game_state();
 
+// Initialize UI system integration
+if (instance_exists(obj_ui_controller)) {
+    show_debug_message("UI Controller found - initializing integration");
+    // The UI controller will handle display, we handle game logic
+} else {
+    show_debug_message("Warning: UI Controller not found in room");
+}
+
 // Initialize display state
 display_mode = "normal"; // normal, shop, help, status
 last_key_time = 0;

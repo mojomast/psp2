@@ -1,43 +1,34 @@
 // obj_title_controller Step Event
 // Handle input and menu navigation
 
-// Check for keyboard input
-key_up_pressed = keyboard_check_pressed(vk_up) || keyboard_check_pressed(ord("W"));
-key_down_pressed = keyboard_check_pressed(vk_down) || keyboard_check_pressed(ord("S"));
-key_enter_pressed = keyboard_check_pressed(vk_enter) || keyboard_check_pressed(vk_space);
-
-// Handle menu navigation
-if (key_up_pressed) {
-    menu_selected--;
-    if (menu_selected < 0) {
-        menu_selected = menu_count - 1;
-    }
+// Only process input if we're in the title room
+if (room != Room_Title) {
+    show_debug_message("Not in title room, current room: " + string(room));
+    return;
 }
 
-if (key_down_pressed) {
-    menu_selected++;
-    if (menu_selected >= menu_count) {
-        menu_selected = 0;
+// Update input delay timer
+input_timer++;
+if (input_timer < input_delay) {
+    if (input_timer % 10 == 0) { // Only show every 10 frames to reduce spam
+        show_debug_message("Input delay active: " + string(input_timer) + "/" + string(input_delay));
     }
+    return;
 }
 
-// Handle menu selection
-if (key_enter_pressed) {
-    switch (menu_selected) {
-        case 0: // Start Game
-            show_debug_message("Starting game - transitioning to Room1");
-            room_goto(Room1);
-            break;
-            
-        case 1: // Settings
-            show_debug_message("Settings not implemented yet");
-            break;
-            
-        case 2: // Exit
-            show_debug_message("Exiting game");
-            game_end();
-            break;
-    }
+if (input_timer == input_delay) {
+    show_debug_message("Title controller Step - processing input, ready for input");
+}
+
+// Simple input handling
+if (keyboard_check_pressed(vk_enter)) {
+    show_debug_message("ENTER pressed - starting game");
+    room_goto(Room1);
+}
+
+if (keyboard_check_pressed(vk_escape)) {
+    show_debug_message("ESC pressed - exiting game");
+    game_end();
 }
 
 // Handle mouse input

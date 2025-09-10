@@ -1,4 +1,8 @@
+// obj_idle_controller Step Event
 // Handle all keyboard shortcuts
+
+// Don't process input if we're in the title screen
+if (room == Room_Title) return;
 // Display help
 if (keyboard_check_pressed(ord("H"))) {
     show_debug_message("=== CONTROLS ===");
@@ -26,6 +30,12 @@ if (keyboard_check_pressed(ord("H"))) {
     show_debug_message("ESC - Exit pets");
     show_debug_message("");
     show_debug_message("Note: Make sure to click on the game window first!");
+    
+    // Tell UI to show help/status panel
+    if (instance_exists(obj_ui_controller)) {
+        obj_ui_controller.ui_active_panel = "resources"; // Default to resources for now
+    }
+    
     display_mode = "help";
     last_key_time = current_time;
 }
@@ -90,6 +100,12 @@ if (keyboard_check_pressed(ord("S"))) {
 
     show_debug_message("");
     show_debug_message("Press 1-3 to buy, Q-W to sell, ESC to exit");
+    
+    // Tell UI to show shop panel
+    if (instance_exists(obj_ui_controller)) {
+        obj_ui_controller.ui_active_panel = "shop";
+    }
+    
     display_mode = "shop";
     last_key_time = current_time;
 }
@@ -123,6 +139,11 @@ if (keyboard_check_pressed(ord("I"))) {
         show_debug_message("Game data loading...");
     }
 
+    // Tell UI to show resources panel (for status)
+    if (instance_exists(obj_ui_controller)) {
+        obj_ui_controller.ui_active_panel = "resources";
+    }
+    
     display_mode = "status";
     last_key_time = current_time;
 }
@@ -131,7 +152,7 @@ if (keyboard_check_pressed(ord("I"))) {
 if (keyboard_check_pressed(ord("C"))) {
     show_debug_message("=== CRAFTING SYSTEM ===");
 
-    var _recipes = get_crafting_recipes();
+    var _recipes = crafting_get_crafting_recipes();
     for (var i = 0; i < array_length(_recipes); i++) {
         var _recipe = _recipes[i];
         show_debug_message(string(i) + ". " + _recipe.name);
@@ -140,6 +161,11 @@ if (keyboard_check_pressed(ord("C"))) {
     }
     show_debug_message("Press 1-8 to craft, ESC to exit");
 
+    // Tell UI to show crafting panel
+    if (instance_exists(obj_ui_controller)) {
+        obj_ui_controller.ui_active_panel = "crafting";
+    }
+    
     display_mode = "crafting";
     last_key_time = current_time;
 }
@@ -156,6 +182,11 @@ if (keyboard_check_pressed(ord("P"))) {
     }
     show_debug_message("Press 1-9 to select pet, E to explore, ESC to exit");
 
+    // Tell UI to show pets panel
+    if (instance_exists(obj_ui_controller)) {
+        obj_ui_controller.ui_active_panel = "pets";
+    }
+    
     display_mode = "pets";
     last_key_time = current_time;
 }

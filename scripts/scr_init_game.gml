@@ -36,5 +36,8 @@ function init_game_state() {
         global.resources.wood = 50;
     }
     
-    show_debug_message("Game initialized");
+    show_debug_message("=== GAME INITIALIZATION COMPLETE ===");
+    show_debug_message("Current room: " + string(room));
+    show_debug_message("Room name: " + room_get_name(room));
+    show_debug_message("Instance count in room: " + string(instance_count));
 }

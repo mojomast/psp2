@@ -5,6 +5,23 @@ draw_set_font(-1);
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
 
+// Check if UI controller exists and is handling display
+var _ui_exists = instance_exists(obj_ui_controller);
+var _ui_visible = false;
+if (_ui_exists && variable_instance_exists(obj_ui_controller, "ui_visible")) {
+    _ui_visible = obj_ui_controller.ui_visible;
+}
+
+// If UI is visible, let it handle the display
+if (_ui_visible) {
+    // Only draw minimal info when UI is active
+    draw_set_color(c_white);
+    draw_set_alpha(0.7);
+    draw_text(20, display_get_gui_height() - 30, "UI Active - Press Tab to toggle");
+    draw_set_alpha(1);
+    return;
+}
+
 // Ensure display_mode is set
 if (!variable_instance_exists(id, "display_mode")) {
     display_mode = "normal";

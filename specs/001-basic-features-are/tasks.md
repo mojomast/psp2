@@ -71,15 +71,15 @@
 - [x] T017 Title screen input handling in `objects/obj_title_controller/Step_0.gml`
 
 ### Core UI Infrastructure  
-- [ ] T018 [P] UI controller object in `objects/obj_ui_controller/obj_ui_controller.yy`
-- [ ] T019 [P] UI system core script in `scripts/scr_ui_system/scr_ui_system.gml`
-- [ ] T020 [P] UI panel base functions in `scripts/scr_ui_panels/scr_ui_panels.gml`
-- [ ] T021 [P] Button system script in `scripts/scr_ui_buttons/scr_ui_buttons.gml`
+- [x] T018 [P] UI controller object in `objects/obj_ui_controller/obj_ui_controller.yy`
+- [x] T019 [P] UI system core script in `scripts/scr_ui_system/scr_ui_system.gml`
+- [x] T020 [P] UI panel base functions in `scripts/scr_ui_panels/scr_ui_panels.gml`
+- [x] T021 [P] Button system script in `scripts/scr_ui_buttons/scr_ui_buttons.gml`
 
 ### UI Controller Events
-- [ ] T022 UI controller initialization in `objects/obj_ui_controller/Create_0.gml`
-- [ ] T023 UI controller drawing system in `objects/obj_ui_controller/Draw_64.gml`  
-- [ ] T024 UI controller mouse handling in `objects/obj_ui_controller/Step_0.gml`
+- [x] T022 UI controller initialization in `objects/obj_ui_controller/Create_0.gml`
+- [x] T023 UI controller drawing system in `objects/obj_ui_controller/Draw_64.gml`  
+- [x] T024 UI controller mouse handling in `objects/obj_ui_controller/Step_0.gml`
 
 ### Individual UI Panels
 - [ ] T025 [P] Resource display panel functions in `scripts/scr_resource_panel/scr_resource_panel.gml`
@@ -91,13 +91,13 @@
 - [ ] T031 [P] Action feedback panel functions in `scripts/scr_feedback_panel/scr_feedback_panel.gml`
 
 ## Phase 3.4: Integration with Existing Systems
-- [ ] T032 Integrate UI controller with existing idle controller in `objects/obj_idle_controller/Create_0.gml`
-- [ ] T033 Connect resource display to global.resources in UI system
-- [ ] T034 Connect pet display to global.pets array in UI system
-- [ ] T035 Connect shop display to existing shop functions in UI system
-- [ ] T036 Connect crafting display to existing crafting system in UI system
-- [ ] T037 Preserve keyboard shortcuts in UI system integration
-- [ ] T038 Connect inventory display to global.inventory in UI system
+- [x] T032 Integrate UI controller with existing idle controller in `objects/obj_idle_controller/Create_0.gml`
+- [x] T033 Connect resource display to global.resources in UI system
+- [x] T034 Connect pet display to global.pets array in UI system
+- [x] T035 Connect shop display to existing shop functions in UI system
+- [x] T036 Connect crafting display to existing crafting system in UI system
+- [x] T037 Preserve keyboard shortcuts in UI system integration
+- [x] T038 Connect inventory display to global.inventory in UI system
 - [ ] T039 Update existing draw events to work with new UI system
 - [ ] T040 Add room transitions between title and game screens
 
