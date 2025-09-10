@@ -3,6 +3,8 @@
 
 // Save game to JSON
 function game_state_save_game() {
+    global.last_save_time = current_time; // Update last save time before saving
+    
     var _save_data = {
         player_name: global.player_name,
         player_level: global.player_level,
@@ -10,7 +12,7 @@ function game_state_save_game() {
         resources: global.resources,
         pets: global.pets,
         inventory: global.inventory,
-        last_save_time: current_time
+        last_save_time: global.last_save_time
     };
     
     var _json = json_stringify(_save_data);
@@ -48,7 +50,7 @@ function game_state_load_game() {
 // Auto-save every 5 minutes
 function game_state_auto_save() {
     game_state_save_game();
-    global.last_save_time = current_time;
+    // Note: last_save_time is already updated in game_state_save_game()
 }
 
 // Update game state (called every step) - OPTIMIZED VERSION

@@ -158,3 +158,38 @@ function map_get_spawn_point(_map) {
 function map_get_exits(_map) {
     return _map.exits;
 }
+
+/// @function validate_map(map)
+/// @description Validate that a map structure is valid
+/// @param {struct} map The map to validate
+/// @return {bool} True if map is valid
+function validate_map(_map) {
+    if (!is_struct(_map)) return false;
+    if (!variable_struct_exists(_map, "id")) return false;
+    if (!variable_struct_exists(_map, "size")) return false;
+    if (!variable_struct_exists(_map, "difficulty")) return false;
+    if (!variable_struct_exists(_map, "tiles")) return false;
+    if (!variable_struct_exists(_map, "spawn_point")) return false;
+    if (!variable_struct_exists(_map, "exits")) return false;
+    
+    // Check that tiles array has correct size
+    if (array_length(_map.tiles) != _map.size * _map.size) return false;
+    
+    return true;
+}
+
+/// @function get_spawn_point(map)
+/// @description Get spawn point from map (alias for map_get_spawn_point)
+/// @param {struct} map The map
+/// @return {struct} Spawn point coordinates
+function get_spawn_point(_map) {
+    return map_get_spawn_point(_map);
+}
+
+/// @function get_exits(map)
+/// @description Get exits from map (alias for map_get_exits)
+/// @param {struct} map The map
+/// @return {array} Array of exit structures
+function get_exits(_map) {
+    return map_get_exits(_map);
+}

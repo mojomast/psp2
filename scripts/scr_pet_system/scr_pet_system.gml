@@ -3,7 +3,13 @@
 
 // Create a new pet
 function pet_create_pet(_name, _type) {
+    // Initialize global pet ID counter if it doesn't exist
+    if (!variable_global_exists("next_pet_id")) {
+        global.next_pet_id = 1;
+    }
+    
     var _pet = {
+        id: global.next_pet_id++,  // Assign unique ID
         name: _name,
         type: _type,
         level: 1,
@@ -124,7 +130,7 @@ function pet_update_pets() {
                     var _base_gold = _pet.level * 5;
                     var _base_wood = _pet.level * 2;
 
-                    if (variable_struct_exists(_pet, "map_data")) {
+                    if (variable_struct_exists(_pet, "map_data") && _pet.map_data != undefined && variable_struct_exists(_pet.map_data, "difficulty")) {
                         _base_gold *= (1 + _pet.map_data.difficulty * 0.5);
                         _base_wood *= (1 + _pet.map_data.difficulty * 0.3);
                     }

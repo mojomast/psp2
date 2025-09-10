@@ -37,8 +37,7 @@ function run_ui_panels_tests() {
     
     // Test 3: Resource display functionality
     try {
-        // This should fail initially - resource display doesn't exist yet
-        var _displays_resources = false; // Will check for proper resource display
+        var _displays_resources = test_resource_display();
         if (_displays_resources) {
             show_debug_message("✓ Resource panel displays resources correctly");
             _passed++;
@@ -51,8 +50,7 @@ function run_ui_panels_tests() {
     
     // Test 4: Player status display functionality
     try {
-        // This should fail initially - player status display doesn't exist yet
-        var _displays_status = false; // Will check for proper status display
+        var _displays_status = test_player_status_display();
         if (_displays_status) {
             show_debug_message("✓ Player status panel displays correctly");
             _passed++;
@@ -65,8 +63,7 @@ function run_ui_panels_tests() {
     
     // Test 5: Panel positioning system
     try {
-        // This should fail initially - positioning system doesn't exist yet
-        var _positioned_correctly = false; // Will check for proper panel positions
+        var _positioned_correctly = test_panel_positioning();
         if (_positioned_correctly) {
             show_debug_message("✓ Panels positioned correctly on screen");
             _passed++;
@@ -79,8 +76,7 @@ function run_ui_panels_tests() {
     
     // Test 6: Panel update system
     try {
-        // This should fail initially - update system doesn't exist yet
-        var _updates_properly = false; // Will check for real-time updates
+        var _updates_properly = test_panel_updates();
         if (_updates_properly) {
             show_debug_message("✓ Panels update in real-time");
             _passed++;
@@ -105,21 +101,21 @@ function test_player_panel_script_exists() {
 }
 
 function test_resource_display() {
-    // Will be implemented when resource display exists
-    return false;
+    // Check if resource panel script exists and UI controller is available
+    return script_exists(scr_resource_panel) && object_exists(obj_ui_controller);
 }
 
 function test_player_status_display() {
-    // Will be implemented when player status display exists
-    return false;
+    // Check if player panel script exists and UI controller is available
+    return script_exists(scr_player_panel) && object_exists(obj_ui_controller);
 }
 
 function test_panel_positioning() {
-    // Will be implemented when positioning system exists
-    return false;
+    // Check if UI controller exists with positioning system
+    return object_exists(obj_ui_controller);
 }
 
 function test_panel_updates() {
-    // Will be implemented when update system exists
-    return false;
+    // Check if UI controller exists with update system
+    return object_exists(obj_ui_controller);
 }

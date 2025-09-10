@@ -79,17 +79,52 @@ switch (ui_active_panel) {
         break;
         
     case "pets":
-        draw_text(panel_x + 10, _content_y, "PETS");
-        _content_y += 30;
-        
-        if (variable_global_exists("pets")) {
-            for (var i = 0; i < array_length(global.pets); i++) {
-                var _pet = global.pets[i];
-                draw_text(panel_x + 10, _content_y, "Pet " + string(i+1) + ": " + string(_pet));
-                _content_y += 20;
+        // Use enhanced pet panel system
+        if (script_exists(scr_pet_panel)) {
+            draw_pet_panel(panel_x + 10, _content_y, panel_width - 20, panel_height - 100, {});
+            
+            // Draw action buttons for selected pet
+            var selected_pet = get_selected_pet_data();
+            if (is_struct(selected_pet)) {
+                var actions = get_pet_action_buttons();
+                var button_y = panel_y + panel_height - 80;
+                var button_width = 80;
+                var button_height = 20;
+                var button_spacing = 5;
+                
+                draw_set_color(color_text);
+                draw_text(panel_x + 10, button_y - 25, "Actions for " + selected_pet.name + ":");
+                
+                for (var i = 0; i < array_length(actions); i++) {
+                    var action = actions[i];
+                    var button_x = panel_x + 10 + (i * (button_width + button_spacing));
+                    
+                    // Draw action button
+                    draw_set_color(action.enabled ? color_button_normal : color_background);
+                    draw_rectangle(button_x, button_y, button_x + button_width, button_y + button_height, false);
+                    
+                    draw_set_color(color_border);
+                    draw_rectangle(button_x, button_y, button_x + button_width, button_y + button_height, true);
+                    
+                    draw_set_color(action.enabled ? color_text : color_border);
+                    draw_set_halign(fa_center);
+                    draw_text(button_x + button_width/2, button_y + 5, action.name);
+                    draw_set_halign(fa_left);
+                }
             }
         } else {
-            draw_text(panel_x + 10, _content_y, "Pets not initialized");
+            draw_text(panel_x + 10, _content_y, "PETS");
+            _content_y += 30;
+            
+            if (variable_global_exists("pets")) {
+                for (var i = 0; i < array_length(global.pets); i++) {
+                    var _pet = global.pets[i];
+                    draw_text(panel_x + 10, _content_y, "Pet " + string(i+1) + ": " + string(_pet));
+                    _content_y += 20;
+                }
+            } else {
+                draw_text(panel_x + 10, _content_y, "Pets not initialized");
+            }
         }
         break;
         
@@ -191,6 +226,9 @@ for (var i = 0; i < array_length(buttons); i++) {
     draw_set_halign(fa_center);
     draw_text(_btn.x + _btn.width/2, _btn.y + _btn.height/2 - 8, _btn.text);
 }
+
+// Draw hover visual effects (T043)
+ui_draw_hover_effects();
 
 // Reset drawing settings
 draw_set_halign(fa_left);

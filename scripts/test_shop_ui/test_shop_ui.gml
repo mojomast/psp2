@@ -23,8 +23,7 @@ function run_shop_ui_tests() {
     
     // Test 2: Shop items display
     try {
-        // This should fail initially - shop items display doesn't exist yet
-        var _displays_items = false; // Will check for proper shop items display
+        var _displays_items = test_shop_items_display();
         if (_displays_items) {
             show_debug_message("✓ Shop panel displays items correctly");
             _passed++;
@@ -37,8 +36,7 @@ function run_shop_ui_tests() {
     
     // Test 3: Buy button functionality
     try {
-        // This should fail initially - buy buttons don't exist yet
-        var _buy_buttons_work = false; // Will check for buy button functionality
+        var _buy_buttons_work = test_shop_buy_buttons();
         if (_buy_buttons_work) {
             show_debug_message("✓ Shop buy buttons functional");
             _passed++;
@@ -51,8 +49,7 @@ function run_shop_ui_tests() {
     
     // Test 4: Sell button functionality
     try {
-        // This should fail initially - sell buttons don't exist yet
-        var _sell_buttons_work = false; // Will check for sell button functionality
+        var _sell_buttons_work = test_shop_sell_buttons();
         if (_sell_buttons_work) {
             show_debug_message("✓ Shop sell buttons functional");
             _passed++;

@@ -101,10 +101,7 @@ function process_shop_command(_command) {
     return shop_process_shop_command(_command);
 }
 
-// Crafting system functions
-function craft_item(_recipe) {
-    return crafting_craft_item(_recipe);
-}
+// Crafting system functions (craft_item function is defined in scr_crafting_system)
 
 function get_crafting_recipes() {
     return crafting_get_crafting_recipes();

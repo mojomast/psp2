@@ -173,3 +173,22 @@ function crafting_process_crafting_command(_command) {
         }
     }
 }
+
+// Wrapper function for test compatibility
+function craft_item(_recipe) {
+    return crafting_craft_item(_recipe);
+}
+
+// Find item in inventory by name
+function find_item_in_inventory(_item_name) {
+    if (!variable_global_exists("inventory")) {
+        global.inventory = [];
+    }
+    
+    for (var i = 0; i < array_length(global.inventory); i++) {
+        if (global.inventory[i].name == _item_name) {
+            return global.inventory[i];
+        }
+    }
+    return undefined;
+}

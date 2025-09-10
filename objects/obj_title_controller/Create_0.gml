@@ -64,3 +64,29 @@ show_debug_message("Menu options: " + string(menu_options));
 show_debug_message("Menu count: " + string(menu_count));
 show_debug_message("Display size: " + string(display_get_width()) + "x" + string(display_get_height()));
 show_debug_message("Menu position: " + string(menu_x) + ", " + string(menu_y));
+
+/// @function transition_to_game()
+/// @description Handle transition from title screen to game
+function transition_to_game() {
+    show_debug_message("Starting transition to game...");
+    
+    // Initialize game systems if needed
+    if (!variable_global_exists("game_initialized") || !global.game_initialized) {
+        init_game_state();
+        global.game_initialized = true;
+        show_debug_message("Game state initialized during transition");
+    }
+    
+    // Add feedback message for the transition
+    try {
+        add_feedback_message("Welcome to Pawn Stars Idle!", "info");
+        show_debug_message("Added welcome message to feedback system");
+    } catch(error) {
+        show_debug_message("Feedback system not available during transition");
+    }
+    
+    // Transition to the main game room
+    room_goto(Room1);
+    
+    show_debug_message("Room transition initiated to Room1");
+}

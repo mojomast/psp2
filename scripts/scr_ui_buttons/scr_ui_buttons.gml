@@ -234,3 +234,159 @@ function ui_button_array_update(buttons, mouse_x, mouse_y, mouse_pressed) {
         }
     }
 }
+
+// === ENHANCED BUTTON CLICK DETECTION SYSTEM (T041) ===
+
+/// @function ui_button_update_enhanced(button, mouse_x, mouse_y, mouse_pressed, mouse_released)
+/// @description Enhanced button update with better click detection and feedback
+/// @param {struct} button The button to update
+/// @param {real} mouse_x Mouse x position
+/// @param {real} mouse_y Mouse y position  
+/// @param {bool} mouse_pressed Whether mouse was just pressed this frame
+/// @param {bool} mouse_released Whether mouse was just released this frame
+/// @return {bool} True if button was clicked (released while over button)
+function ui_button_update_enhanced(button, mouse_x, mouse_y, mouse_pressed, mouse_released) {
+    if (!button.visible || !button.enabled) {
+        button.hovered = false;
+        button.pressed = false;
+        return false;
+    }
+    
+    var _was_hovered = button.hovered;
+    var _was_pressed = button.pressed;
+    
+    // Check if mouse is over button
+    button.hovered = ui_is_point_in_rect(mouse_x, mouse_y, button.x, button.y, button.width, button.height);
+    
+    // Handle mouse press
+    if (button.hovered && mouse_pressed) {
+        button.pressed = true;
+        // Add feedback message for press
+        if (script_exists(add_feedback_message)) {
+            add_feedback_message("Button pressed: " + button.text, "action");
+        }
+        return false; // Don't trigger callback on press, wait for release
+    }
+    
+    // Handle mouse release (actual click detection)
+    if (button.pressed && mouse_released) {
+        button.pressed = false;
+        if (button.hovered) {
+            // Successful click - mouse was pressed and released over button
+            ui_button_trigger_click_feedback(button);
+            return true;
+        } else {
+            // Click cancelled - mouse released outside button
+            if (script_exists(add_feedback_message)) {
+                add_feedback_message("Button click cancelled", "info");
+            }
+            return false;
+        }
+    }
+    
+    // Handle hover enter/exit
+    if (button.hovered && !_was_hovered) {
+        ui_button_trigger_hover_feedback(button);
+    }
+    
+    return false;
+}
+
+/// @function ui_button_trigger_click_feedback(button)
+/// @description Trigger feedback effects when button is clicked
+/// @param {struct} button The button that was clicked
+function ui_button_trigger_click_feedback(button) {
+    // Visual feedback
+    show_debug_message("Button clicked: " + button.text);
+    
+    // Add feedback message
+    if (script_exists(add_feedback_message)) {
+        add_feedback_message("Clicked: " + button.text, "success");
+    }
+    
+    // TODO: Add sound effect when sound system is implemented
+    // audio_play_sound(snd_button_click, 1, false);
+    
+    // Visual click effect (could be expanded with particles/animations)
+    // This could trigger a brief flash or other visual effect
+}
+
+/// @function ui_button_trigger_hover_feedback(button)
+/// @description Trigger feedback effects when button is hovered
+/// @param {struct} button The button that was hovered
+function ui_button_trigger_hover_feedback(button) {
+    // Subtle feedback for hover
+    show_debug_message("Button hovered: " + button.text);
+    
+    // TODO: Add hover sound when sound system is implemented
+    // audio_play_sound(snd_button_hover, 1, false);
+}
+
+/// @function ui_button_array_update_enhanced(buttons, mouse_x, mouse_y, mouse_pressed, mouse_released)
+/// @description Update an array of buttons with enhanced click detection
+/// @param {array} buttons Array of button structs
+/// @param {real} mouse_x Mouse x position
+/// @param {real} mouse_y Mouse y position
+/// @param {bool} mouse_pressed Whether mouse was just pressed this frame
+/// @param {bool} mouse_released Whether mouse was just released this frame
+/// @return {struct|undefined} Button that was clicked, or undefined if none
+function ui_button_array_update_enhanced(buttons, mouse_x, mouse_y, mouse_pressed, mouse_released) {
+    for (var i = 0; i < array_length(buttons); i++) {
+        if (ui_button_update_enhanced(buttons[i], mouse_x, mouse_y, mouse_pressed, mouse_released)) {
+            ui_button_execute_callback(buttons[i]);
+            return buttons[i]; // Return the clicked button
+        }
+    }
+    return undefined; // No button was clicked
+}
+
+/// @function ui_button_get_clicked_button_id(buttons, mouse_x, mouse_y, mouse_released)
+/// @description Get the ID/index of the clicked button in an array
+/// @param {array} buttons Array of button structs
+/// @param {real} mouse_x Mouse x position
+/// @param {real} mouse_y Mouse y position  
+/// @param {bool} mouse_released Whether mouse was just released this frame
+/// @return {real} Index of clicked button, or -1 if none clicked
+function ui_button_get_clicked_button_id(buttons, mouse_x, mouse_y, mouse_released) {
+    for (var i = 0; i < array_length(buttons); i++) {
+        if (ui_button_update_enhanced(buttons[i], mouse_x, mouse_y, false, mouse_released)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+/// @function ui_trigger_button_hover_feedback(button, index)
+// @description Trigger hover feedback for a button
+// @param {struct} button The button struct
+// @param {real} index The button index
+function ui_trigger_button_hover_feedback(button, index) {
+    button.hovered = true;
+    // Add any additional hover feedback here (sounds, animations, etc.)
+    show_debug_message("Button " + string(index) + " (" + button.text + ") hovered");
+}
+
+/// @function ui_trigger_button_hover_exit_feedback(button, index)
+// @description Trigger hover exit feedback for a button  
+// @param {struct} button The button struct
+// @param {real} index The button index
+function ui_trigger_button_hover_exit_feedback(button, index) {
+    button.hovered = false;
+    // Add any additional hover exit feedback here
+}
+
+/// @function ui_button_is_clicked(button, mouse_x, mouse_y, mouse_pressed)
+// @description Check if a button is clicked
+// @param {struct} button The button to check
+// @param {real} mouse_x Mouse X position
+// @param {real} mouse_y Mouse Y position
+// @param {bool} mouse_pressed Whether mouse is pressed
+// @return {bool} True if button is clicked
+function ui_button_is_clicked(button, mouse_x, mouse_y, mouse_pressed) {
+    if (!button.visible || !button.enabled) return false;
+    
+    var _in_bounds = (mouse_x >= button.x && mouse_x <= button.x + button.width &&
+                      mouse_y >= button.y && mouse_y <= button.y + button.height);
+    
+    return _in_bounds && mouse_pressed;
+}

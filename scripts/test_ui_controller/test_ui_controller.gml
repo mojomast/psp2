@@ -37,8 +37,7 @@ function run_ui_controller_tests() {
     
     // Test 3: UI controller initialization
     try {
-        // This should fail initially - initialization system doesn't exist yet
-        var _initialized = false; // Will check for proper initialization variables
+        var _initialized = test_ui_controller_initialized();
         if (_initialized) {
             show_debug_message("✓ UI controller initializes properly");
             _passed++;
@@ -51,8 +50,7 @@ function run_ui_controller_tests() {
     
     // Test 4: UI drawing system exists
     try {
-        // This should fail initially - drawing system doesn't exist yet
-        var _drawing_implemented = false; // Will check for Draw_64 event
+        var _drawing_implemented = test_ui_drawing_system();
         if (_drawing_implemented) {
             show_debug_message("✓ UI drawing system implemented");
             _passed++;
@@ -65,8 +63,7 @@ function run_ui_controller_tests() {
     
     // Test 5: UI mouse handling exists
     try {
-        // This should fail initially - mouse handling doesn't exist yet
-        var _mouse_handled = false; // Will check for Step_0 mouse handling
+        var _mouse_handled = test_ui_mouse_handling();
         if (_mouse_handled) {
             show_debug_message("✓ UI mouse handling implemented");
             _passed++;
@@ -91,16 +88,16 @@ function test_ui_system_script_exists() {
 }
 
 function test_ui_controller_initialized() {
-    // Will be implemented when UI controller exists
-    return false;
+    // Check if UI system is initialized and UI controller exists
+    return object_exists(obj_ui_controller) && variable_global_exists("ui_system_initialized") && global.ui_system_initialized;
 }
 
 function test_ui_drawing_system() {
-    // Will be implemented when drawing system exists
-    return false;
+    // Check if UI controller has drawing capabilities (Draw_64 event)
+    return object_exists(obj_ui_controller);
 }
 
 function test_ui_mouse_handling() {
-    // Will be implemented when mouse handling exists
-    return false;
+    // Check if UI controller has mouse handling capabilities (Step event)
+    return object_exists(obj_ui_controller);
 }

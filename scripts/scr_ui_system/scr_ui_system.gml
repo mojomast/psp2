@@ -16,6 +16,14 @@
 #macro UI_COLOR_BUTTON_NORMAL make_color_rgb(60, 60, 60)
 #macro UI_COLOR_BUTTON_HOVER make_color_rgb(80, 80, 80)
 
+// Additional Panel Colors
+#macro UI_COLOR_PANEL_BG make_color_rgb(40, 40, 40)
+#macro UI_COLOR_SELECTED make_color_rgb(70, 120, 170)
+#macro UI_COLOR_SLOT_BG make_color_rgb(50, 50, 50)
+#macro UI_COLOR_BAR_BG make_color_rgb(25, 25, 25)
+#macro UI_COLOR_EXP_BAR make_color_rgb(100, 200, 100)
+#macro UI_COLOR_ENERGY_BAR make_color_rgb(100, 150, 255)
+
 // UI System Global Variables
 global.ui_system_initialized = false;
 global.ui_panels_visible = true;

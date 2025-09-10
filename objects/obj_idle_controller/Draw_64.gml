@@ -12,12 +12,12 @@ if (_ui_exists && variable_instance_exists(obj_ui_controller, "ui_visible")) {
     _ui_visible = obj_ui_controller.ui_visible;
 }
 
-// If UI is visible, let it handle the display
+// If UI is visible, let it handle the display instead of drawing legacy UI
 if (_ui_visible) {
-    // Only draw minimal info when UI is active
+    // Draw minimal debug info when UI is active
     draw_set_color(c_white);
-    draw_set_alpha(0.7);
-    draw_text(20, display_get_gui_height() - 30, "UI Active - Press Tab to toggle");
+    draw_set_alpha(0.5);
+    draw_text(10, display_get_gui_height() - 20, "Press Tab to toggle UI | ESC for debug");
     draw_set_alpha(1);
     return;
 }
